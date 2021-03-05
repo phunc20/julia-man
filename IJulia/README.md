@@ -27,7 +27,7 @@ There are two ways:
 01. Just as slightly mentioned above:
   - Run `julia` REPL
   - `using IJulia`
-  - `notebook()` or `notebook(dir="some_dir")`
+  - `notebook()` or `notebook(dir="some_dir")` **or `jupyterlab()`**
 02. Choose one of your favorite Python virtual environment, be it miniconda or virtualenv(wrapper)
   - Run `jupyter-notebook` on a terminal
   - To open a new julia notebook, just click `[New] -> [Julia]`
