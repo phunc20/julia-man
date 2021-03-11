@@ -305,6 +305,70 @@ Dense(10, 5, σ)(rand(10))
 # ╔═╡ 492a1200-8256-11eb-25ea-2fd41050493f
 Dense(10, 5)(rand(10))
 
+# ╔═╡ a03ee0f6-8261-11eb-3fda-c1e1c7e294dd
+md"""
+## Using `Dense`, `Chain` and Other `Flux` Things
+We could have done the same as above using
+```julia
+layer1 = Dense(10, 5, σ)
+# ...
+model(x) = layer3(layer2(layer1(x)))
+```
+There can be still other ways:
+"""
+
+# ╔═╡ a02b04dc-8261-11eb-28a4-5975841e3647
+layers = [Dense(10, 5, σ), Dense(5,2), softmax]
+
+# ╔═╡ de8f97de-8262-11eb-371f-67987e1b8d6e
+md"""
+Oh, BTW, as you might have already noticed
+- `σ`
+- `softmax`
+are all defined in `Flux`
+"""
+
+# ╔═╡ c442a2c0-8262-11eb-313f-a3e2936b7aa5
+model_fold(x) = foldl((x,m) -> m(x), layers, init=x)
+
+# ╔═╡ a00c721a-8261-11eb-1bec-1f438963b38a
+md"""
+The concept and usage of `foldl` seems to resemble that of its equivalent in Scala.
+"""
+
+# ╔═╡ f8bfc65e-8262-11eb-1d53-6d11a6bd70cf
+begin
+  res = model_fold(rand(10))
+  res, sum(res)
+end
+
+# ╔═╡ f8844dfe-8262-11eb-1dab-65376333ce1e
+# MNIST-like input/output
+model2 = Chain(
+  Dense(27*27, 100, σ),
+  Dense(100, 10),
+  softmax
+)
+
+# ╔═╡ f85ff918-8262-11eb-26e3-fb87245d3238
+model2(rand(27*27))
+
+# ╔═╡ 807b8d9c-8265-11eb-21bd-83508a1ae74c
+md"""
+There exists still many other ways of composing/writing things up:
+"""
+
+# ╔═╡ a27fda58-8265-11eb-3237-3996e53f82c1
+(Dense(5,2) ∘ Dense(10, 5, σ))(rand(10))
+
+# ╔═╡ a2420af0-8265-11eb-1372-6b767e5c2a64
+Chain(x -> x^2, x -> x+1)(5)
+
+# ╔═╡ 666f0b08-8266-11eb-201d-4354eb9cae08
+md"""
+## `outdims()` function
+"""
+
 # ╔═╡ Cell order:
 # ╠═8d070ed4-8197-11eb-1ca9-f5354be2ffbd
 # ╠═8ce76b60-8197-11eb-2ba0-1fbd56efda05
@@ -364,3 +428,15 @@ Dense(10, 5)(rand(10))
 # ╟─5ed138fe-8256-11eb-39f1-371d2390dc3b
 # ╠═49799d40-8256-11eb-2f49-4d3e6ca8e337
 # ╠═492a1200-8256-11eb-25ea-2fd41050493f
+# ╟─a03ee0f6-8261-11eb-3fda-c1e1c7e294dd
+# ╠═a02b04dc-8261-11eb-28a4-5975841e3647
+# ╟─de8f97de-8262-11eb-371f-67987e1b8d6e
+# ╠═c442a2c0-8262-11eb-313f-a3e2936b7aa5
+# ╟─a00c721a-8261-11eb-1bec-1f438963b38a
+# ╠═f8bfc65e-8262-11eb-1d53-6d11a6bd70cf
+# ╠═f8844dfe-8262-11eb-1dab-65376333ce1e
+# ╠═f85ff918-8262-11eb-26e3-fb87245d3238
+# ╟─807b8d9c-8265-11eb-21bd-83508a1ae74c
+# ╠═a27fda58-8265-11eb-3237-3996e53f82c1
+# ╠═a2420af0-8265-11eb-1372-6b767e5c2a64
+# ╟─666f0b08-8266-11eb-201d-4354eb9cae08
