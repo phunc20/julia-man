@@ -1,17 +1,8 @@
 ### A Pluto.jl notebook ###
-# v0.12.20
+# v0.12.18
 
 using Markdown
 using InteractiveUtils
-
-# ╔═╡ 8ce76b60-8197-11eb-2ba0-1fbd56efda05
-using Flux
-
-# ╔═╡ d10152c2-824e-11eb-13f6-6baeb4aec189
-begin
-  using Random
-  Random.seed!(42)
-end
 
 # ╔═╡ 8d070ed4-8197-11eb-1ca9-f5354be2ffbd
 begin
@@ -20,6 +11,13 @@ begin
   Pkg.add([
     "Flux"
   ])
+  using Flux
+end
+
+# ╔═╡ d10152c2-824e-11eb-13f6-6baeb4aec189
+begin
+  using Random
+  Random.seed!(42)
 end
 
 # ╔═╡ d2130040-81b8-11eb-1475-0b09814b3f1b
@@ -307,7 +305,7 @@ Dense(10, 5)(rand(10))
 
 # ╔═╡ a03ee0f6-8261-11eb-3fda-c1e1c7e294dd
 md"""
-## Using `Dense`, `Chain` and Other `Flux` Things
+## Using `Dense`, `Chain` and Other `Flux` Stuffs
 We could have done the same as above using
 ```julia
 layer1 = Dense(10, 5, σ)
@@ -371,7 +369,6 @@ md"""
 
 # ╔═╡ Cell order:
 # ╠═8d070ed4-8197-11eb-1ca9-f5354be2ffbd
-# ╠═8ce76b60-8197-11eb-2ba0-1fbd56efda05
 # ╟─d2130040-81b8-11eb-1475-0b09814b3f1b
 # ╠═814b60ca-8199-11eb-36f6-8f46f90b8b4f
 # ╠═b32bb1e4-8199-11eb-3a2b-5b84551b25fc
