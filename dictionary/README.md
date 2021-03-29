@@ -1,3 +1,59 @@
+## `Pair`
+The key-value pairs of a Julia dictionary is foremost of type `Pair`s.
+```julia
+julia> D = Dict("love" => "tình yêu", "flag" => "kỳ", "turqoise" => "lam")
+Dict{String,String} with 3 entries:
+  "flag"     => "kỳ"
+  "love"     => "tình yêu"
+  "turqoise" => "lam"
+
+julia> for p in D
+         println(typeof(p))
+       end
+Pair{String,String}
+Pair{String,String}
+Pair{String,String}
+
+julia> typeof("age" => 33)
+Pair{String,Int64}
+
+julia> k, v = "age" => 33
+"age" => 33
+
+julia> k
+"age"
+
+julia> v
+33
+
+julia> for (k, v) in D
+         println("$k maps to $v")
+       end
+flag maps to kỳ
+love maps to tình yêu
+turqoise maps to lam
+
+julia> p = "lucky number" => 42
+"lucky number" => 42
+
+julia> p
+"lucky number" => 42
+
+julia> typeof(p)
+Pair{String,Int64}
+
+julia> k, v = p
+"lucky number" => 42
+
+julia> k
+"lucky number"
+
+julia> v
+42
+
+```
+
+
 ## Check if a key is in a dictionary
 To access a Julia dictionary's keys, there are at least two ways, say we have at our disposal
 a dictionary named `fibo`.
