@@ -32,3 +32,14 @@ There are two ways:
   - Run `jupyter-notebook` on a terminal
   - To open a new julia notebook, just click `[New] -> [Julia]`
   - To open an existing julia notebook, just click on that notebook, the program is smart enough to know which kernel to use to run the notebook.
+
+
+## Shell Commands
+It seems that
+- `!` does not work, unlike in Jupyter Python notebooks (e.g. `!ls`)
+- `;` seems to work partially. For example,
+  - `;ls` can list the current working directory
+  - But things like `;ls | grep *.jl` do not work, the reason being
+    - `*` wild card not working
+    - pipe not working
+  - This also means that one can run a Julia script in IJulia by running `;julia some_script.jl`
