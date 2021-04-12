@@ -42,7 +42,7 @@ I have also fruitlessly tried to run Julia as
 - `unset PYTHONHOME; julia`
 But none of these succeeded.
 
-### Success
+### One solution
 It turned out that
 - activating a new project
 - **`build PyCall`** after `pkg"add PyCall"` is one solution.
@@ -112,3 +112,70 @@ command corrects the wrong paths shown in the error message above. Let's verify 
     julia> PyCall.PYTHONHOME
     "/home/phunc20/.julia/conda/3:/home/phunc20/.julia/conda/3"
     ```
+
+### Another solution
+As far as I understand, the above solution using `build PyCall` is **to require Linux to install a separate conda directory (usually under `~/.julia/conda/3/`)**, whose Python will be used in `PyCall`. Instead of this, we have
+another option, which is to use the Linux system's
+default Python (i.e. the one when you call `which python` in terminal.)<br>
+**Rmk**. I don't know why, but only the system's default
+Python works -- neither any additional Python versions I installed under `usr/local/bin/python3.x` or virtualenv's Python have worked yet.
+```bash
+julia> ENV["PYTHON"] = Sys.which("python3.7")
+"/usr/local/bin/python3.7"
+
+julia> using Pkg; pkg"build PyCall"
+Building Conda ─→ `~/.julia/packages/Conda/x5ml4/deps/build.log`
+Building PyCall → `~/.julia/packages/PyCall/BD546/deps/build.log`
+
+julia> using PyCall
+[ Info: Precompiling PyCall [438e738f-606a-5dbb-bf0a-cddfbfd45ab0]
+Python path configuration:
+PYTHONHOME = '/usr/local:/usr/local'
+PYTHONPATH = (not set)
+program name = '/usr/local/bin/python3.7'
+isolated = 0
+environment = 1
+user site = 1
+import site = 1
+sys._base_executable = '/usr/local/bin/python3.7'
+sys.base_prefix = '/usr/local'
+sys.base_exec_prefix = '/usr/local'
+sys.platlibdir = 'lib'
+sys.executable = '/usr/local/bin/python3.7'
+sys.prefix = '/usr/local'
+sys.exec_prefix = '/usr/local'
+sys.path = [
+'/usr/local/lib/python39.zip',
+'/usr/local/lib/python3.9',
+'/usr/local/lib/python3.9/lib-dynload',
+]
+Fatal Python error: init_fs_encoding: failed to get the Python codec of the filesystem encoding
+Python runtime state: core initialized
+ModuleNotFoundError: No module named 'encodings'
+
+Current thread 0x00007f06cae2b240 (most recent call first):
+<no Python frame>
+~/git-repos/phunc20/julia_notebooks *** julia
+
+   _       _ _(_)_     |  Documentation: https://docs.julialang.org
+  (_)     | (_) (_)    |
+   _ _   _| |_  __ _   |  Type "?" for help, "]?" for Pkg help.
+  | | | | | | |/ _` |  |
+  | | |_| | | | (_| |  |  Version 1.5.3 (2020-11-09)
+ _/ |\__'_|_|_|\__'_|  |  Official https://julialang.org/ release
+|__/                   |
+
+julia> ENV["PYTHON"] = Sys.which("python")
+"/usr/bin/python3.9"
+
+(@v1.5) pkg> build PyCall
+Building Conda ─→ `~/.julia/packages/Conda/x5ml4/deps/build.log`
+Building PyCall → `~/.julia/packages/PyCall/BD546/deps/build.log`
+
+julia> using PyCall
+[ Info: Precompiling PyCall [438e738f-606a-5dbb-bf0a-cddfbfd45ab0]
+
+julia> py"print(f'1 + 2 = {1+2}')"
+1 + 2 = 3
+```
+
