@@ -111,6 +111,9 @@ command corrects the wrong paths shown in the error message above. Let's verify 
     
     julia> PyCall.PYTHONHOME
     "/home/phunc20/.julia/conda/3:/home/phunc20/.julia/conda/3"
+
+    julia> PyCall.conda
+    true
     ```
 
 ### Another solution
@@ -180,5 +183,8 @@ julia> using PyCall
 
 julia> py"print(f'1 + 2 = {1+2}')"
 1 + 2 = 3
+
+julia> PyCall.conda
+false
 ```
 
