@@ -117,8 +117,11 @@ command corrects the wrong paths shown in the error message above. Let's verify 
 As far as I understand, the above solution using `build PyCall` is **to require Linux to install a separate conda directory (usually under `~/.julia/conda/3/`)**, whose Python will be used in `PyCall`. Instead of this, we have
 another option, which is to use the Linux system's
 default Python (i.e. the one when you call `which python` in terminal.)<br>
-**Rmk**. I don't know why, but only the system's default
-Python works -- neither any additional Python versions I installed under `usr/local/bin/python3.x` or virtualenv's Python have worked yet.
+**Rmk**.
+01. I don't know why, but only the system's default Python works -- Neither any additional Python versions
+I installed under `usr/local/bin/python3.x` or virtualenv's Python have worked yet.
+02. This solution has a drawback on rolling-release Linux distro (e.g. Arch-linux). Indeed, the system's default
+Python version may change with time, leading to an unstable `PyCall`.
 ```bash
 julia> ENV["PYTHON"] = Sys.which("python3.7")
 "/usr/local/bin/python3.7"
