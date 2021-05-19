@@ -12,13 +12,13 @@ Julia has its default active project located in `~/.julia/environments/v#.#` (wh
 version, e.g. `1.5`). One can set a different project when starting Julia by
 ```bash
 # BASH
-Julia --project=/path/to/my_project
+julia --project=/path/to/my_project
 ```
 or by
 ```bash
 # BASH
 export JULIA_PROJECT=/path/to/my_project
-Julia
+julia
 ```
 or even after having started Julia by
 ```julia
