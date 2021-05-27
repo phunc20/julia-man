@@ -43,3 +43,11 @@ It seems that
     - `*` wild card not working
     - pipe not working
   - This also means that one can run a Julia script in IJulia by running `;julia some_script.jl`
+
+
+## Activate A Project from Inside Jupyter Notebook
+Say, your project is under the path `~/.config/julia/projects/oft/`,
+then write in one of the topmost cells of your notebook the following:
+```julia
+]activate ~/.config/julia/projects/oft/
+```
