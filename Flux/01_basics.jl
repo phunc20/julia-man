@@ -51,6 +51,9 @@ md"""
 #∇f(2)
 f′(2)
 
+# ╔═╡ 94c39f1d-2403-4108-a110-2f11407cd3b8
+methods(f′)
+
 # ╔═╡ cab491ce-81af-11eb-104e-235b93a73465
 md"""
 If we inspect `typeof(gradient(f, x))`, then we'll get the following error message:
@@ -457,6 +460,7 @@ end
 # ╠═b32bb1e4-8199-11eb-3a2b-5b84551b25fc
 # ╟─92b0854f-f388-4c87-84db-8994c88d687e
 # ╠═c634e58f-3fe4-4969-a235-48a468f00b72
+# ╠═94c39f1d-2403-4108-a110-2f11407cd3b8
 # ╟─cab491ce-81af-11eb-104e-235b93a73465
 # ╠═18e710bb-1391-4756-9a9a-c017d88762b0
 # ╠═38581a5a-0f35-4428-b8ce-32fd455078df
