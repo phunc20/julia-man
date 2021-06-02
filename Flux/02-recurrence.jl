@@ -69,15 +69,57 @@ Indeed,
 # ╔═╡ 8cbd3adc-4070-42b5-b39d-ea65ad57b8c0
 h
 
+# ╔═╡ 6af8a13d-b70a-4fc0-88a2-b08402ab1981
+Base.show(io::IO, f::Float64) = @printf(io, "%.2f", f)
+
 # ╔═╡ 63eda4b3-e702-4f9d-95dd-7b575397e79f
 with_terminal() do
   x = rand(2)
   h = rand(5)
-  for i in 1:10
+  for i in 1:7
 	h, y = rnn(h, x)
-	println("(i=", i, ") ", "y = ", y)
-    #println("(i=", i, ") ", "y = $(@sprintf("%.2f", y))")
-	#println("y = $(@sprintf("%.2f", y))")
+	#println("(i=", i, ") ", "y = ", y)
+	println("(i=", @sprintf("%2d", i), ") ", " y = ", y)
+  end
+end
+
+# ╔═╡ 2a68bb7e-13d3-4130-a26e-848dbad04e90
+Flux.RNNCell, Flux.LSTMCell, Flux.GRUCell
+
+# ╔═╡ b12926dd-befa-41c7-8e8b-718cc93ccf00
+begin
+  rnn_cell = Flux.RNNCell(2, 5)
+  lstm_cell = Flux.LSTMCell(2, 5)
+  gru_cell = Flux.GRUCell(2, 5)
+end
+
+# ╔═╡ 42c25ecb-4325-4ee8-b4e9-4e355b00bfcb
+with_terminal() do
+  x = rand(Float32, 2)
+  h = rand(Float32, 5)
+  for i in 1:5
+	h, y = rnn_cell(h, x)
+	println("(i=", @sprintf("%2d", i), ")\n", "y = ", y, "\nh = ", h)
+  end
+end
+
+# ╔═╡ f8f65c09-ce6c-4516-9be4-35dd715cf263
+#with_terminal() do
+#  x = rand(Float32, 2)
+#  h = rand(Float32, 5)
+#  for i in 1:5
+#	h, y = lstm_cell(h, x)
+#	println("(i=", @sprintf("%2d", i), ")\n", "y = ", y, "\nh = ", h)
+#  end
+#end
+
+# ╔═╡ d924f58e-fb7f-43c1-8226-e229435f998a
+with_terminal() do
+  x = rand(Float32, 2)
+  h = rand(Float32, 5)
+  for i in 1:5
+	h, y = gru_cell(h, x)
+	println("(i=", @sprintf("%2d", i), ")\n", "y = ", y, "\nh = ", h)
   end
 end
 
@@ -92,4 +134,10 @@ end
 # ╠═bc5b80e9-a774-401b-8a55-219774bb4760
 # ╠═c36cb7c3-fdbd-4e59-88c3-b09b3853b398
 # ╠═8cbd3adc-4070-42b5-b39d-ea65ad57b8c0
+# ╠═6af8a13d-b70a-4fc0-88a2-b08402ab1981
 # ╠═63eda4b3-e702-4f9d-95dd-7b575397e79f
+# ╠═2a68bb7e-13d3-4130-a26e-848dbad04e90
+# ╠═b12926dd-befa-41c7-8e8b-718cc93ccf00
+# ╠═42c25ecb-4325-4ee8-b4e9-4e355b00bfcb
+# ╠═f8f65c09-ce6c-4516-9be4-35dd715cf263
+# ╠═d924f58e-fb7f-43c1-8226-e229435f998a
