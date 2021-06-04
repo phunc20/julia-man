@@ -1,4 +1,13 @@
+## Comment and Uncomment
+The following trick is actually quite **universal** -- Not only applicable to `Pluto`, but also
+`jupyter notebook`, PyCharm, etc. **`Ctrl-/`** is the trick
 
+- To comment multiple lines:
+  - Visually select the text
+  - Press `Ctrl-/` (i.e. `Ctrl` plus **slash**)
+- To uncomment multiple lines is the same.
+  - Visually select the (commented) text
+  - Press `Ctrl-/`
 
 
 ### YouTube

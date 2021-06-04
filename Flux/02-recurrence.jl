@@ -103,15 +103,21 @@ with_terminal() do
   end
 end
 
+# ╔═╡ 67563e32-e189-4aa4-809e-39b3b8c8aa65
+md"""
+**(?)** Why the same code does not work for `LSTMCell`?
+
+"""
+
 # ╔═╡ f8f65c09-ce6c-4516-9be4-35dd715cf263
-#with_terminal() do
+# with_terminal() do
 #  x = rand(Float32, 2)
 #  h = rand(Float32, 5)
 #  for i in 1:5
-#	h, y = lstm_cell(h, x)
-#	println("(i=", @sprintf("%2d", i), ")\n", "y = ", y, "\nh = ", h)
+# 	h, y = lstm_cell(h, x)
+# 	println("(i=", @sprintf("%2d", i), ")\n", "y = ", y, "\nh = ", h)
 #  end
-#end
+# end
 
 # ╔═╡ d924f58e-fb7f-43c1-8226-e229435f998a
 with_terminal() do
@@ -139,5 +145,6 @@ end
 # ╠═2a68bb7e-13d3-4130-a26e-848dbad04e90
 # ╠═b12926dd-befa-41c7-8e8b-718cc93ccf00
 # ╠═42c25ecb-4325-4ee8-b4e9-4e355b00bfcb
+# ╟─67563e32-e189-4aa4-809e-39b3b8c8aa65
 # ╠═f8f65c09-ce6c-4516-9be4-35dd715cf263
 # ╠═d924f58e-fb7f-43c1-8226-e229435f998a
