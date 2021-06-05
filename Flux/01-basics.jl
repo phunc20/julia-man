@@ -7,7 +7,7 @@ using InteractiveUtils
 # ╔═╡ c734673a-c6e6-4de3-b8d4-fa68b870c255
 begin
   import Pkg
-  Pkg.activate("/home/phunc20/.config/julia/projects/oft")
+  Pkg.activate(Base.Filesystem.homedir() * "/.config/julia/projects/oft")
   using Flux
 end
 
@@ -74,8 +74,40 @@ typeof(f′)
 md"""
 **(?)** The `[1]` in `f′(x) = gradient(f, x)[1]`, what for?
 
-**(R)** I guess, `gradient` is an implementation of **autodiff** / **dual number**. Let's try to define `g(x) = gradient(f, x)[2]`.
+**(R)** I guess, `gradient` is an implementation of **autodiff** / **dual number**. Let's try to define `g(x) = gradient(f, x)[2]`. **Non, non, pas du tout!**
+
+In this particular case, it is actually quite simple:
+```julia
+f(x) = 3x^2 + 2x + 1
+```
+`gradient(f, 10)` allows you to compute the value `(62,)` (as a tuple, where $62 = 6*10 + 2 = f'(10)\,.$)
+More generally speaking, for any number `t` (say, `t = 3.14, -2.71828, 1e19, etc.`), `gradient(f, t)` always returns the number $f'(t) = 6t + 2$ in a tuple, i.e. `(6t+2,)`)
+
+Now, the ways we define
+```julia
+f′(x) = gradient(f, x)[1]
+```
+is just saying
+
+> We shall now define a function named `f′`,
+> which maps each `x` to `gradient(f, x)[1]`,
+> i.e. which maps each number `x` to the number `gradient(f, x)[1]`,
+> où le `[1]` est là **pour enlever les parenthèse du tuple** `gradient(f, x)`.
 """
+
+# ╔═╡ 9e0d9c09-d248-4cf6-ae17-100b54386c62
+(62,)
+
+# ╔═╡ 9a5ec893-3d70-4cdc-83e3-70e2834753a2
+gradient(f, 10)
+
+# ╔═╡ 2827aad3-cef4-43f8-ba1e-f25beccb6018
+begin
+  t = 3.14
+  #t = -2.71828
+  #t = 1e19
+  gradient(f, t)
+end
 
 # ╔═╡ 061d9944-81b3-11eb-1168-956e97f2c08c
 md"""
@@ -344,9 +376,22 @@ md"""
 ### Manually3: Template
 """
 
+# ╔═╡ 049570d0-8253-11eb-2d1d-35cacf8c0597
+begin
+  struct Affine
+    W::Array
+    b::Array
+  end
+
+  Affine(n_in::Integer, n_out::Integer) = Affine(randn(n_out, n_in), randn(n_out))
+
+  # Overload call, so an instance of the object can be used as a function
+  (m::Affine)(x) = m.W * x .+ m.b
+end
+
 # ╔═╡ e81a6060-8254-11eb-3608-25569cd3a40f
 md"""
-**Note.** In Pluto, the two definitions above **_must be grouped into a single cell_**; otherwise, Pluto will
+**Note.** In Pluto, the **_three_** definitions above **_must be grouped into a single cell_**; otherwise, Pluto will
 complain about multiple definitions of the same object/data structure.
 """
 
@@ -437,20 +482,6 @@ md"""
 ## `outdims()` function
 """
 
-# ╔═╡ b59da87c-8254-11eb-0823-3f1bedd509e0
-# Overload call, so an instance of the object can be used as a function
-(m::Affine)(x) = m.W * x .+ m.b
-
-# ╔═╡ 049570d0-8253-11eb-2d1d-35cacf8c0597
-begin
-  struct Affine
-    W
-    b
-  end
-  
-  Affine(n_in::Integer, n_out::Integer) = Affine(randn(n_out, n_in), randn(n_out))
-end
-
 # ╔═╡ Cell order:
 # ╠═8d070ed4-8197-11eb-1ca9-f5354be2ffbd
 # ╠═c734673a-c6e6-4de3-b8d4-fa68b870c255
@@ -465,6 +496,9 @@ end
 # ╠═18e710bb-1391-4756-9a9a-c017d88762b0
 # ╠═38581a5a-0f35-4428-b8ce-32fd455078df
 # ╟─3bc381a6-f9e7-4da1-a6e7-e85bced2bc0a
+# ╠═9e0d9c09-d248-4cf6-ae17-100b54386c62
+# ╠═9a5ec893-3d70-4cdc-83e3-70e2834753a2
+# ╠═2827aad3-cef4-43f8-ba1e-f25beccb6018
 # ╟─061d9944-81b3-11eb-1168-956e97f2c08c
 # ╠═f0ade939-c585-4444-a7c2-57e867ac89c4
 # ╠═9f638357-9795-4690-acfb-71a3d703eb2d
@@ -521,7 +555,6 @@ end
 # ╟─049d3084-8253-11eb-0324-b5f563aff8f3
 # ╠═049570d0-8253-11eb-2d1d-35cacf8c0597
 # ╟─e81a6060-8254-11eb-3608-25569cd3a40f
-# ╠═b59da87c-8254-11eb-0823-3f1bedd509e0
 # ╠═b565c036-8254-11eb-2472-758e00842f4b
 # ╠═046fb640-8253-11eb-18fa-b34bef08ad65
 # ╟─5ed138fe-8256-11eb-39f1-371d2390dc3b
