@@ -9,5 +9,12 @@ In Pluto notebooks, things are slightly different
 - inline math is the same as above.
   - Besides, surrounding by **double-apostrophe signs** (aka **_double backtics_**) works as well, e.g. **``c^2 = a^2 + b^2``**
 - displayed math is done however by, `\n$$c^2 = a^2 + b^2$$`, i.e. surrounding $\LaTeX$ code by double-dollar signs, **plus a newline** before the opening double-dollar sign.
+  - or by
+  ```julia
+  ```math
+  Ax = b \\
+  x = A^{-1}b
+  ` ``
+  ```
 
 
