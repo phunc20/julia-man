@@ -263,7 +263,8 @@ begin
       return (l*0,)
     end
   end
-  @adjoint ϕ(M,j,t) = ϕ(M,j,t), l -> ϕ_adjoint(M,j,t,l)
+  #@adjoint ϕ(M,j,t) = ϕ(M,j,t), l -> ϕ_adjoint(M,j,t,l)
+  @adjoint ϕ(M,j,t) = ϕ(M,j,t), l -> (nothing, nothing, ϕ_adjoint(M,j,t,l))
 end
 
 # ╔═╡ d22cf50b-a6c4-48ee-a153-9bef70dbaa18
@@ -309,8 +310,8 @@ let
   # Values which do not work
   #a = j/(M-1)
   #a = (j+1)/(M-1)
-  #a = (j-0.5)/(M-1)
-  a = (j-1)/(M-1)
+  a = (j-0.5)/(M-1)
+  #a = (j-1)/(M-1)
   #a = rand((j-1)/(M-1):0.05:j/(M-1))
   with_terminal() do
     println("M = ", M, ", j = ", j)
