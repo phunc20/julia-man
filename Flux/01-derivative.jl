@@ -310,9 +310,9 @@ let
   # Values which do not work
   #a = j/(M-1)
   #a = (j+1)/(M-1)
-  a = (j-0.5)/(M-1)
+  #a = (j-0.5)/(M-1)
   #a = (j-1)/(M-1)
-  #a = rand((j-1)/(M-1):0.05:j/(M-1))
+  a = rand((j-1)/(M-1):0.05:(j+1)/(M-1))
   with_terminal() do
     println("M = ", M, ", j = ", j)
     #println("ϕ(M, j)(", a, ") = ", ϕ(M,j)(a))
