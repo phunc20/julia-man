@@ -307,17 +307,17 @@ let
   #a = (j+2)/(M-1)
 
   # Values which do not work
-  a = j/(M-1)
+  #a = j/(M-1)
   #a = (j+1)/(M-1)
   #a = (j-0.5)/(M-1)
-  #a = (j-1)/(M-1)
+  a = (j-1)/(M-1)
   #a = rand((j-1)/(M-1):0.05:j/(M-1))
   with_terminal() do
     println("M = ", M, ", j = ", j)
     #println("ϕ(M, j)(", a, ") = ", ϕ(M,j)(a))
     println("ϕ(M, j)(", a, ") = ", ϕ(M,j,a))
     #println("derivative(ϕ(M,j))(", a, ") = ", derivative(ϕ(M,j))(a))
-    println("derivative(ϕ(M,j))(", a, ") = ", derivative(s->ϕ(M,j,s))(a))
+    println("derivative(ϕ(M,j,t))(", a, ") = ", derivative(t->ϕ(M,j,t))(a))
   end
 end
 
@@ -325,9 +325,16 @@ end
 
 
 # ╔═╡ f91dfdb5-cf93-4048-99eb-f5b6d3a5ca46
-begin
+let
   mul(a, b) = a*b
   @adjoint mul(a, b) = mul(a, b), c̄ -> (c̄*b, c̄*a)
+  gradient(mul, 2, 3)
+end
+
+# ╔═╡ df80dbe4-d631-4f66-b0b5-158f3ececf9f
+let
+  mul(a, b) = a*b
+  gradient(mul, 2, 3)
 end
 
 # ╔═╡ Cell order:
@@ -341,12 +348,13 @@ end
 # ╟─3164f92d-00ef-4949-bb1c-a9521421b257
 # ╟─540f5d20-e7d9-41ba-9a69-81b7f81d27ef
 # ╠═314eb767-61c9-42ad-a28c-6722f4fb9ac1
-# ╠═5fe1ec4f-14cf-4ce1-9e97-08af21fe78ba
-# ╠═f7fcf011-ac3a-412d-8bac-a77f3731ee46
-# ╠═9ad69459-ef86-4e0f-a028-8e76065576d1
-# ╠═12bef322-eba3-47e4-b78c-40cac695e316
+# ╟─5fe1ec4f-14cf-4ce1-9e97-08af21fe78ba
+# ╟─f7fcf011-ac3a-412d-8bac-a77f3731ee46
+# ╟─9ad69459-ef86-4e0f-a028-8e76065576d1
+# ╟─12bef322-eba3-47e4-b78c-40cac695e316
 # ╠═e4bc53a4-83da-48a6-9fe5-2fb0b3c91495
 # ╟─d22cf50b-a6c4-48ee-a153-9bef70dbaa18
 # ╠═8f8b321d-87a3-4ce4-827e-8c537ebf802a
 # ╠═aff04885-9d3c-4c40-a135-38f2f7a5ac4e
 # ╠═f91dfdb5-cf93-4048-99eb-f5b6d3a5ca46
+# ╠═df80dbe4-d631-4f66-b0b5-158f3ececf9f
