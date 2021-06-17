@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.14.7
+# v0.14.8
 
 using Markdown
 using InteractiveUtils
@@ -199,6 +199,30 @@ $\nabla g(\begin{bmatrix}2\\1\end{bmatrix}, \begin{bmatrix}2\\0\end{bmatrix}) = 
 \,.$
 
 """
+
+# ╔═╡ 577585bf-3d9a-4bdb-aeb8-dfb41f309ff0
+md"""
+Let's explore a few more possibilities with `gradient`.
+
+- The gradient of a constant function is `(nothing,)`, which is not what we are used to.
+"""
+
+# ╔═╡ 19928af2-1840-4438-9008-6b22b390c54c
+let
+  function un(t::Number)
+    return 1
+  end
+  gradient(un, π), gradient(t->1, π)
+end
+
+# ╔═╡ 58c8cef3-e36e-400b-9834-b042911e6da7
+gradient(t -> [cos(t), sin(t)], π/2)
+
+# ╔═╡ 1a148362-f3cf-4607-8bf7-272aeffb5373
+let
+  f(x,y,z) = xy + z^2
+  gradient(f, [1,2,3])
+end
 
 # ╔═╡ b8190986-81b2-11eb-2605-f79e1cc310dc
 md"""
@@ -517,6 +541,10 @@ md"""
 # ╠═b8b1cd2e-81b2-11eb-32b4-bd8c62b6133a
 # ╠═b85ced88-81b2-11eb-18be-4da0e21d7c6a
 # ╟─c8ec8320-81b3-11eb-3886-8535bfbc54b2
+# ╠═577585bf-3d9a-4bdb-aeb8-dfb41f309ff0
+# ╠═19928af2-1840-4438-9008-6b22b390c54c
+# ╠═58c8cef3-e36e-400b-9834-b042911e6da7
+# ╠═1a148362-f3cf-4607-8bf7-272aeffb5373
 # ╟─b8190986-81b2-11eb-2605-f79e1cc310dc
 # ╠═ce7809f4-81ba-11eb-1d04-231c2fb609a9
 # ╠═c9142f50-81b9-11eb-04b8-afafe176c23f
