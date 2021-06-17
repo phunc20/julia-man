@@ -14,8 +14,6 @@ begin
   using PlutoUI
   #using TikzPictures
   #using LaTeXStrings
-  #using SparseArrays
-  #using Profile
   #using BenchmarkTools
 end
 
@@ -100,127 +98,6 @@ let
   end
 end
 
-# ╔═╡ 314eb767-61c9-42ad-a28c-6722f4fb9ac1
-
-
-# ╔═╡ 5fe1ec4f-14cf-4ce1-9e97-08af21fe78ba
-# function ϕ(M::Int, j::Int)
-#   if M <= 0
-#     error("M must be a positive integer")
-#   end
-#   if j < 1 || j > M - 2
-#     error("j must be a positive integer in [1 .. M-2]")
-#   end
-#   function ϕⱼ(t::Number)
-#     tmesh = range(0,1;length=M)
-#     h = tmesh[2]
-#     tⱼ₋₁ = tmesh[j]
-#     tⱼ   = tmesh[j+1]
-#     tⱼ₊₁ = tmesh[j+2]
-
-#     if t > tⱼ₊₁
-#       return 0
-#     elseif t >= tⱼ
-#       return (tⱼ₊₁ - t) / h
-#     elseif t >= tⱼ₋₁
-#       return (t - tⱼ₋₁) / h
-#     else
-#       return 0
-#     end
-#   end
-#   return ϕⱼ
-# end
-
-# ╔═╡ f7fcf011-ac3a-412d-8bac-a77f3731ee46
-# begin
-#   function ϕ(M::Int, j::Int)
-#     if M <= 0
-#       error("M must be a positive integer")
-#     end
-#     if j < 1 || j > M - 2
-#       error("j must be a positive integer in [1 .. M-2]")
-#     end
-#     function ϕⱼ(t::Number)
-#       tmesh = range(0,1;length=M)
-#       h = tmesh[2]
-#       tⱼ₋₁ = tmesh[j]
-#       tⱼ   = tmesh[j+1]
-#       tⱼ₊₁ = tmesh[j+2]
-  
-#       if t > tⱼ₊₁
-#         return 0
-#       elseif t >= tⱼ
-#         return (tⱼ₊₁ - t) / h
-#       elseif t >= tⱼ₋₁
-#         return (t - tⱼ₋₁) / h
-#       else
-#         return 0
-#       end
-#     end
-#     function ϕⱼ_adjoint(l)
-#       tmesh = range(0,1;length=M)
-#       h = tmesh[2]
-#       tⱼ₋₁ = tmesh[j]
-#       tⱼ   = tmesh[j+1]
-#       tⱼ₊₁ = tmesh[j+2]
-#       if t > tⱼ₊₁
-#         return (l*0,)
-#       elseif t >= tⱼ
-#         return (-l/h,)
-#       elseif t >= tⱼ₋₁
-#         return (l/h,)
-#       else
-#         return (l*0,)
-#       end
-#     end
-#     @adjoint ϕⱼ(t) = ϕⱼ(t), ϕⱼ_adjoint
-#     return ϕⱼ
-#   end
-# end
-
-# ╔═╡ 9ad69459-ef86-4e0f-a028-8e76065576d1
-# function ϕ(M, j, t)
-#   if M <= 0
-#     error("M must be a positive integer")
-#   end
-#   if j < 1 || j > M - 2
-#     error("j must be a positive integer in [1 .. M-2]")
-#   end
-#   tmesh = range(0,1;length=M)
-#   h = tmesh[2]
-#   tⱼ₋₁ = tmesh[j]
-#   tⱼ   = tmesh[j+1]
-#   tⱼ₊₁ = tmesh[j+2]
-
-#   if t > tⱼ₊₁
-#     return 0
-#   elseif t >= tⱼ
-#     return (tⱼ₊₁ - t) / h
-#   elseif t >= tⱼ₋₁
-#     return (t - tⱼ₋₁) / h
-#   else
-#     return 0
-#   end
-# end
-
-# ╔═╡ 12bef322-eba3-47e4-b78c-40cac695e316
-# function ϕ_adjoint(M, j, l)
-#   tmesh = range(0,1;length=M)
-#   h = tmesh[2]
-#   tⱼ₋₁ = tmesh[j]
-#   tⱼ   = tmesh[j+1]
-#   tⱼ₊₁ = tmesh[j+2]
-#   if t > tⱼ₊₁
-#     return (l*0,)
-#   elseif t >= tⱼ
-#     return (-l/h,)
-#   elseif t >= tⱼ₋₁
-#     return (l/h,)
-#   else
-#     return (l*0,)
-#   end
-# end
-
 # ╔═╡ e4bc53a4-83da-48a6-9fe5-2fb0b3c91495
 begin
   #function ϕ(M::Int, j::Int, t::Number)
@@ -274,7 +151,6 @@ let
   lw = 2
   ts = range(0,1;length=700)
   plot(ts,
-       #ϕ(M,1).(ts),
        (t->ϕ(M,1,t)).(ts),
        linealpha=alpha,
        linewidth=lw,
@@ -289,7 +165,6 @@ let
   )
   for j in 2:M-2
     plot!(ts,
-          #ϕ(M,j).(ts),
           (t->ϕ(M,j,t)).(ts),
           linewidth=lw,
           linealpha=alpha,
@@ -315,27 +190,117 @@ let
   a = rand((j-1)/(M-1):0.05:(j+1)/(M-1))
   with_terminal() do
     println("M = ", M, ", j = ", j)
-    #println("ϕ(M, j)(", a, ") = ", ϕ(M,j)(a))
     println("ϕ(M, j)(", a, ") = ", ϕ(M,j,a))
-    #println("derivative(ϕ(M,j))(", a, ") = ", derivative(ϕ(M,j))(a))
     println("derivative(ϕ(M,j,t))(", a, ") = ", derivative(t->ϕ(M,j,t))(a))
   end
 end
 
+# ╔═╡ 5575f0e3-9df8-493e-b65b-da2d37e162ff
+md"""
+The above cell should output (for the derivative)
+
+- `5.0` when `0.4 <= a < 0.6`
+- `-5.0` when `0.6 <= a <= 0.8`
+
+This seems to provide a way to differentiate piecewise linear functions. But, there is sth better yet.
+"""
+
+# ╔═╡ 6ef0207c-c71e-4b41-be24-0dbbd43bd0f5
+md"""
+## A More Elegant Way
+This method is thanks to an administrator of the Facebook group `Julia Taiwan` with pseudo `Peter Cheng`. His idea is as follows.
+
+> Piecewise linear functions, like the hat functions above, are **no more special** than `relu`. Why would we ever need to define `@adjoint` for `ϕ` but no need for `relu`? It was `phunc20`'s choice of implementation which led him to the difficulties.
+
+His idea was to define one single hat function, and have all the other hat functions be simple variants of the first one (via function composition, for example.)
+"""
+
 # ╔═╡ aff04885-9d3c-4c40-a135-38f2f7a5ac4e
-
-
-# ╔═╡ f91dfdb5-cf93-4048-99eb-f5b6d3a5ca46
-let
-  mul(a, b) = a*b
-  @adjoint mul(a, b) = mul(a, b), c̄ -> (c̄*b, c̄*a)
-  gradient(mul, 2, 3)
+function hat(t::Number)
+  if t < -1
+    return 0
+  elseif t > 1
+    return 0
+  elseif t < 0
+    return t + 1
+  else
+    return 1 - t
+  end
 end
 
-# ╔═╡ df80dbe4-d631-4f66-b0b5-158f3ececf9f
+# ╔═╡ 3e55cc4a-1859-42c9-9805-004bb0695b0f
+derivative(hat).(range(-1.1, 1.1;step=0.3))
+
+# ╔═╡ a89a34e2-18e1-4f12-a54d-abcda44f0be7
+gradient(hat, -0.3), gradient(hat, 0), gradient(hat, 1), gradient(hat, 1.7)
+
+# ╔═╡ 58b19198-9515-443a-aec7-6cf2cb0018a2
 let
-  mul(a, b) = a*b
-  gradient(mul, 2, 3)
+  M = 7
+  range(0, 1; length=M)[2] == 1 / (M-1)
+end
+
+# ╔═╡ b77d2ca7-3640-48ef-affa-88c3a70290c8
+function phi(M::Int, j::Int)
+  if M <= 0
+    error("M must be a positive integer")
+  end
+  if j < 1 || j > M - 2
+    error("j must be a positive integer in [1 .. M-2]")
+  end
+  #h = range(0, 1; length=M)[2]
+  h = 1 / (M-1)
+  tⱼ = j*h
+  function intermediate(t::Number)
+    return (t - tⱼ) / h
+  end
+  return hat ∘ intermediate
+end
+
+# ╔═╡ 06ec2b9f-2289-4398-acc5-26914f63126d
+let
+  M = 5
+  alpha = 0.7
+  lw = 2
+  ts = range(0,1;length=700)
+  plot(ts,
+       phi(M,1).(ts),
+       linealpha=alpha,
+       linewidth=lw,
+       xlim=(0,1.1),
+       xticks=range(0,1;length=M),
+       yticks=range(0,1;length=M),
+       aspect_ratio=:equal,
+       label="ϕ1",
+       legend=:topleft,
+       background_color=:black,
+       title="Same plot by hat()",
+  )
+  for j in 2:M-2
+    plot!(ts,
+          phi(M,j).(ts),
+          linewidth=lw,
+          linealpha=alpha,
+          label="ϕ$(j)")
+  end
+  plot!()
+end
+
+# ╔═╡ cc4d1ef8-b857-4bad-a914-2876ce4143d7
+let
+  M = 6
+  j = 3
+
+  #a = j/(M-1)
+  #a = (j+1)/(M-1)
+  #a = (j-0.5)/(M-1)
+  #a = (j-1)/(M-1)
+  a = rand((j-1)/(M-1):0.05:(j+1)/(M-1))
+  with_terminal() do
+    println("M = ", M, ", j = ", j)
+    println("phi(M, j)(", a, ") = ", phi(M,j)(a))
+    println("derivative(phi(M,j))(", a, ") = ", derivative(phi(M,j))(a))
+  end
 end
 
 # ╔═╡ Cell order:
@@ -348,14 +313,15 @@ end
 # ╠═73ff8ee2-0bcc-422c-8199-a7462c27fbc1
 # ╟─3164f92d-00ef-4949-bb1c-a9521421b257
 # ╟─540f5d20-e7d9-41ba-9a69-81b7f81d27ef
-# ╠═314eb767-61c9-42ad-a28c-6722f4fb9ac1
-# ╟─5fe1ec4f-14cf-4ce1-9e97-08af21fe78ba
-# ╟─f7fcf011-ac3a-412d-8bac-a77f3731ee46
-# ╟─9ad69459-ef86-4e0f-a028-8e76065576d1
-# ╟─12bef322-eba3-47e4-b78c-40cac695e316
 # ╠═e4bc53a4-83da-48a6-9fe5-2fb0b3c91495
 # ╟─d22cf50b-a6c4-48ee-a153-9bef70dbaa18
 # ╠═8f8b321d-87a3-4ce4-827e-8c537ebf802a
+# ╟─5575f0e3-9df8-493e-b65b-da2d37e162ff
+# ╟─6ef0207c-c71e-4b41-be24-0dbbd43bd0f5
 # ╠═aff04885-9d3c-4c40-a135-38f2f7a5ac4e
-# ╠═f91dfdb5-cf93-4048-99eb-f5b6d3a5ca46
-# ╠═df80dbe4-d631-4f66-b0b5-158f3ececf9f
+# ╠═3e55cc4a-1859-42c9-9805-004bb0695b0f
+# ╠═a89a34e2-18e1-4f12-a54d-abcda44f0be7
+# ╠═58b19198-9515-443a-aec7-6cf2cb0018a2
+# ╠═b77d2ca7-3640-48ef-affa-88c3a70290c8
+# ╟─06ec2b9f-2289-4398-acc5-26914f63126d
+# ╠═cc4d1ef8-b857-4bad-a914-2876ce4143d7
