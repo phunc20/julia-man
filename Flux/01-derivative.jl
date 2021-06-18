@@ -17,12 +17,6 @@ begin
   #using BenchmarkTools
 end
 
-# ╔═╡ 03702c6a-56d8-45f4-8d7d-e05521915685
-md"""
-## Piecewise Linear Functions
-Let's try the `gradient` method on piecewise linear functions.
-"""
-
 # ╔═╡ f5df8344-8845-4f3e-b0fd-2bb4761c7ca5
 function derivative(f::Function)::Function
   function f′(t::Number)
@@ -42,6 +36,61 @@ end
 function naive_derivative(f::Function)::Function
   return t -> gradient(f, t)[1]
 end
+
+# ╔═╡ e6af47b1-e7e9-4173-afac-24a9141d246d
+md"""
+## Weird Behaviour of Derivatives at `Irrational`
+A good example is worth more than a thousand words.
+
+**Note.** In case you forgot it like me: The natural number `ℯ` is typed by `\euler<Tab>` in Julia.
+"""
+
+# ╔═╡ 058d4c3d-9073-42f3-a0d6-4b1569f1a318
+derivative(t -> t)(π), derivative(t -> t)(-π), derivative(t -> t)(3.14159)
+
+# ╔═╡ b7e41023-7339-413f-a426-74ae0966eb47
+derivative(t -> t)(ℯ), derivative(t -> t)(-ℯ), derivative(t -> t)(2.71828)
+
+# ╔═╡ 32197417-55ea-43c2-adf3-20005b74e25d
+typeof(π), typeof(-π), typeof(3.14159)
+
+# ╔═╡ 24e4e0c0-7ea3-4b82-a0f9-2fe2e690bf93
+typeof(ℯ), typeof(-ℯ), typeof(2.71828)
+
+# ╔═╡ 8aef747a-22c0-41bd-8174-9c3bb59baa43
+md"""
+It seems that only the identity function returns `true`.
+"""
+
+# ╔═╡ 6718e732-7bec-4ff9-ac33-325b9ae3c585
+(t->t)'(π), (t->2t)'(π), (t->t^2)'(π), (t->1)'(0.1)  # For ' and its usage, cf. below
+
+# ╔═╡ 6878b339-114d-4014-aeec-089b08c5564d
+(t->1)'(π), nothing
+
+# ╔═╡ d5b0ff5b-caef-4ee4-8f92-26533bdfd30e
+(t->t^1.0000000001)'(π)
+
+# ╔═╡ 03f49db3-505a-44a6-b1a1-c00c7cde8cf0
+md"""
+**(?)** What if we don't use anonymous function?
+
+**(R)** The same.
+"""
+
+# ╔═╡ 79a462c7-bfe9-457d-96d2-b66bbcf950fc
+let
+  function identity(t::Number)
+    t
+  end
+  identity'(π)
+end
+
+# ╔═╡ ef96c4f9-4bef-4f61-8512-16fbdd5a6ea3
+md"""
+## Piecewise Linear Functions
+Let's try the `gradient` method on piecewise linear functions.
+"""
 
 # ╔═╡ f4e5f88a-1b35-4dfc-8ecb-274733778c4c
 function relu0(t::Number)
@@ -334,6 +383,7 @@ end
 
 # ╔═╡ 939e4045-151f-4c23-bf7d-3704b200e996
 md"""
+### Fun Distraction
 Note that we have the following convience way of writing derivatives: $(HTML("<br>"))
 (It suffices to `using Flux` or `using Zygote` before using it; otherwise, it will be understood as the adjoint of a matrix.)
 """
@@ -367,6 +417,11 @@ Because I am kind of lazy and because I have already spent a lot of time editing
 
 # ╔═╡ dbdfcbbc-a75d-4ce5-94bb-dfdeb946eef3
 adjoint(x -> x^2)(2), adjoint(adjoint(x -> x^2))(2)
+
+# ╔═╡ 59a7a886-3b67-4332-bc58-39d6eb862fff
+md"""
+### Back to Our `hat` Method
+"""
 
 # ╔═╡ 3e55cc4a-1859-42c9-9805-004bb0695b0f
 derivative(hat).(range(-1.1, 1.1;step=0.3))
@@ -445,9 +500,20 @@ end
 
 # ╔═╡ Cell order:
 # ╠═fc5fbca8-cf36-11eb-08e1-7d34e645f9b7
-# ╟─03702c6a-56d8-45f4-8d7d-e05521915685
 # ╠═f5df8344-8845-4f3e-b0fd-2bb4761c7ca5
 # ╠═55fef076-3f49-49a2-b9cf-3bcea969af59
+# ╟─e6af47b1-e7e9-4173-afac-24a9141d246d
+# ╠═058d4c3d-9073-42f3-a0d6-4b1569f1a318
+# ╠═b7e41023-7339-413f-a426-74ae0966eb47
+# ╠═32197417-55ea-43c2-adf3-20005b74e25d
+# ╠═24e4e0c0-7ea3-4b82-a0f9-2fe2e690bf93
+# ╟─8aef747a-22c0-41bd-8174-9c3bb59baa43
+# ╠═6718e732-7bec-4ff9-ac33-325b9ae3c585
+# ╠═6878b339-114d-4014-aeec-089b08c5564d
+# ╠═d5b0ff5b-caef-4ee4-8f92-26533bdfd30e
+# ╟─03f49db3-505a-44a6-b1a1-c00c7cde8cf0
+# ╠═79a462c7-bfe9-457d-96d2-b66bbcf950fc
+# ╟─ef96c4f9-4bef-4f61-8512-16fbdd5a6ea3
 # ╠═f4e5f88a-1b35-4dfc-8ecb-274733778c4c
 # ╠═73ff8ee2-0bcc-422c-8199-a7462c27fbc1
 # ╟─3164f92d-00ef-4949-bb1c-a9521421b257
@@ -468,9 +534,10 @@ end
 # ╟─caf72b7a-90f8-43f3-8079-74fb7333acf0
 # ╠═d29fd9aa-4fe7-427b-bdcc-f764d2ee9ec1
 # ╠═dbdfcbbc-a75d-4ce5-94bb-dfdeb946eef3
+# ╟─59a7a886-3b67-4332-bc58-39d6eb862fff
 # ╠═3e55cc4a-1859-42c9-9805-004bb0695b0f
 # ╠═a89a34e2-18e1-4f12-a54d-abcda44f0be7
 # ╠═58b19198-9515-443a-aec7-6cf2cb0018a2
 # ╠═b77d2ca7-3640-48ef-affa-88c3a70290c8
-# ╟─06ec2b9f-2289-4398-acc5-26914f63126d
+# ╠═06ec2b9f-2289-4398-acc5-26914f63126d
 # ╠═cc4d1ef8-b857-4bad-a914-2876ce4143d7
