@@ -332,6 +332,42 @@ function hat(t::Number)
   end
 end
 
+# ╔═╡ 939e4045-151f-4c23-bf7d-3704b200e996
+md"""
+Note that we have the following convience way of writing derivatives: $(HTML("<br>"))
+(It suffices to `using Flux` or `using Zygote` before using it; otherwise, it will be understood as the adjoint of a matrix.)
+"""
+
+# ╔═╡ 7fd8bd8b-751d-4122-8624-599027001025
+hat'(0), hat''(0)
+
+# ╔═╡ 7a8aa8e0-b795-4455-87a7-4c21ad9d1528
+(x -> x^2)'(2), (x -> x^2)''(2), (x -> x^2)'''(2)
+
+# ╔═╡ 68a44042-1103-423d-a44f-964e9cd1af4e
+(t->1)'(10), nothing
+
+# ╔═╡ caf72b7a-90f8-43f3-8079-74fb7333acf0
+md"""
+As far as I understand, if we use the following `methods(adjoint)`
+to find the definition of the method, then it seems to be inside the file
+`/home/phunc20/.julia/packages/Zygote/zowrf/src/compiler/interface.jl` (Line 62), which writes
+
+```julia
+Base.adjoint(f::Function) = x -> gradient(f, x)[1]
+```
+
+So, basically, this is a simple convenience function wrapping around `gradient`.
+
+Because I am kind of lazy and because I have already spent a lot of time editing the present notebook, I shall not take the pain replacing the `gradient` by this, more concise and probably more terminologically correct, prime thing (`'` / `adjoint`).
+"""
+
+# ╔═╡ d29fd9aa-4fe7-427b-bdcc-f764d2ee9ec1
+#methods(adjoint)
+
+# ╔═╡ dbdfcbbc-a75d-4ce5-94bb-dfdeb946eef3
+adjoint(x -> x^2)(2), adjoint(adjoint(x -> x^2))(2)
+
 # ╔═╡ 3e55cc4a-1859-42c9-9805-004bb0695b0f
 derivative(hat).(range(-1.1, 1.1;step=0.3))
 
@@ -425,6 +461,13 @@ end
 # ╟─5575f0e3-9df8-493e-b65b-da2d37e162ff
 # ╟─6ef0207c-c71e-4b41-be24-0dbbd43bd0f5
 # ╠═aff04885-9d3c-4c40-a135-38f2f7a5ac4e
+# ╟─939e4045-151f-4c23-bf7d-3704b200e996
+# ╠═7fd8bd8b-751d-4122-8624-599027001025
+# ╠═7a8aa8e0-b795-4455-87a7-4c21ad9d1528
+# ╠═68a44042-1103-423d-a44f-964e9cd1af4e
+# ╟─caf72b7a-90f8-43f3-8079-74fb7333acf0
+# ╠═d29fd9aa-4fe7-427b-bdcc-f764d2ee9ec1
+# ╠═dbdfcbbc-a75d-4ce5-94bb-dfdeb946eef3
 # ╠═3e55cc4a-1859-42c9-9805-004bb0695b0f
 # ╠═a89a34e2-18e1-4f12-a54d-abcda44f0be7
 # ╠═58b19198-9515-443a-aec7-6cf2cb0018a2
