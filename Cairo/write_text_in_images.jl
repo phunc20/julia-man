@@ -202,7 +202,7 @@ function process(D_detected, cr)
   txt = D_detected["text"]
   Cairo.text(cr,
              x1, y1,
-             txt,
+             txt;
              halign="right",
              valign="bottom",
              markup=true,
@@ -224,6 +224,42 @@ let
   Cairo.stroke(cr)
   c
 end
+
+# ╔═╡ 3f860eeb-33f5-498c-bef9-c37d2d9c128d
+md"""
+## Ref
+Here below are the references I consult during the process of making this notebook, in decreasing order of relation.
+- Cairo
+  - The original Cairo
+    - <https://www.cairographics.org/>
+  - Learn Cairo in Julia from examples
+    - <https://github.com/JuliaGraphics/Cairo.jl/blob/master/samples/Samples.md>
+    - Same examples but in C <https://www.cairographics.org/samples/>
+  - In Python, one can use `cairo` as well.
+    - <https://chadrick-kwag.net/converting-cv2-img-to-cairo-surface/>
+    - <https://stackoverflow.com/questions/13455256/paint-decoded-jpeg-to-cairo-surface>
+- `Luxor`
+  - <https://juliagraphics.github.io/Luxor.jl/v1.0/index.html>
+  - <https://juliagraphics.github.io/Luxor.jl/stable/>
+  - <https://github.com/JuliaGraphics/Luxor.jl>
+- `imagemagick`
+  - <https://imagemagick.org/script/convert.php>
+- `JSON`
+  - <https://github.com/JuliaIO/JSON.jl>
+- `UnicodePlots`
+  - <https://github.com/Evizero/UnicodePlots.jl>
+- Unicode input
+  - <https://docs.julialang.org/en/v1/manual/unicode-input/>
+- `ImageDraw`
+  - <https://juliaimages.org/ImageDraw.jl/dev/>
+  - <https://github.com/JuliaImages/ImageDraw.jl/issues/4>
+- `FreeTypeAbstraction`
+  - <https://github.com/JuliaGraphics/FreeTypeAbstraction.jl>
+- `FreeType`
+  - <https://github.com/JuliaGraphics/FreeType.jl>
+- `ImageView`
+  - <https://github.com/JuliaImages/ImageView.jl#annotation-api>
+"""
 
 # ╔═╡ Cell order:
 # ╟─34393f9c-087f-4868-9eae-d2e296ab9804
@@ -251,3 +287,4 @@ end
 # ╠═42578bb1-2eba-40d6-856c-02b67127d01e
 # ╠═27dc388b-683d-40f4-a4bc-af00daf8f91e
 # ╠═92dcef04-8bab-4a35-bd99-baef7607809a
+# ╟─3f860eeb-33f5-498c-bef9-c37d2d9c128d
