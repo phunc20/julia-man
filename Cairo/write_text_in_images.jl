@@ -137,6 +137,9 @@ res_JSON = JSON.parsefile("tokyo.json")
 # ╔═╡ 8cc85a75-cfb0-40b5-bb2f-16f7212bf582
 res_JSON.keys
 
+# ╔═╡ 6908f528-f6fb-4750-9e4f-ac28bb7e4101
+keys(res_JSON)
+
 # ╔═╡ 103bdb2b-df94-4dd9-b93f-915177c43dd5
 res_JSON["words"]
 
@@ -278,6 +281,7 @@ Here below are the references I consult during the process of making this notebo
 # ╠═da612d95-be76-4267-907a-9d67b2bb91f8
 # ╠═d00967a5-aed3-4f6d-bfe4-4238700d0fd4
 # ╠═8cc85a75-cfb0-40b5-bb2f-16f7212bf582
+# ╠═6908f528-f6fb-4750-9e4f-ac28bb7e4101
 # ╠═103bdb2b-df94-4dd9-b93f-915177c43dd5
 # ╠═0f8271d0-a095-41ec-a549-7cc9263c2700
 # ╠═054ec70b-5ab9-46b9-8c5a-5b984313b4e9
