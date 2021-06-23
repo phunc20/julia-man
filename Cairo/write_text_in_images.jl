@@ -219,7 +219,8 @@ let
   res_JSON = JSON.parsefile("tokyo.json")
   c = read_from_png("tokyo.png")
   cr = CairoContext(c)
-  set_source_rgb(cr, 1, 0.5, 0);
+  color = (1, 0.5, 0)
+  set_source_rgb(cr, color...);
   for D_detected in res_JSON["words"]
     process(D_detected, cr)
   end
