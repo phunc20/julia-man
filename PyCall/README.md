@@ -1,3 +1,17 @@
+## Specify A Python Virtual Environment
+If you are a Python user, you probably have many virtual environment on your machine. But by default
+Julia won't know which one you want to use, and it will use its own reserved Python environment.
+
+However, you are able to tell Julia which exact virtual environment you want to use. All you need is
+```julia
+using Pkg
+# Change the next line to suit your own virtual env path
+ENV["PYTHON"] = "/home/phunc20/.local/bin/miniconda3/envs/oft/bin/python"
+Pkg.build("PyCall")
+using PyCall
+```
+
+
 ## Troubleshoot
 ### Failures
 The cell with a single line of code `using PyCall` in ageron's IJulia notebook `Julia_for_Pythonistas.ipynb` on my
