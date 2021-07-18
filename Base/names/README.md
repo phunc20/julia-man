@@ -23,6 +23,27 @@ julia> names(Main)
  :card3
 ```
 
+Note that `varinfo` (from `InteractiveUtils`) can also achieve similar goals. You can
+specify the Module and a regex string for search.
+```
+julia> varinfo()
+  name                    size summary
+  –––––––––––––––– ––––––––––– –––––––
+  Base                         Module
+  Core                         Module
+  InteractiveUtils 196.988 KiB Module
+  Main                         Module
+  ans                          Module
+  card1                 1 byte Card
+  card2                 1 byte Card
+  card3                 1 byte Card
 
+julia> varinfo(Main, r"card*")
+  name    size summary
+  ––––– –––––– –––––––
+  card1 1 byte Card
+  card2 1 byte Card
+  card3 1 byte Card
 
+```
 
