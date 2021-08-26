@@ -1,3 +1,15 @@
+## General
+- To know to which package a macro belongs, one can put the macro inside `var"<here>"`:
+  ```julia
+  julia> @which var"@which"
+  InteractiveUtils
+  julia> using Distributed
+  julia> @which var"@everywhere"
+  Distributed
+  ```
+  Found this from [this discourse](https://discourse.julialang.org/t/how-to-determine-where-a-macro-is-defined/31637)
+
+
 
 ## Some Common Macros
 - `@which` and `@edit`.

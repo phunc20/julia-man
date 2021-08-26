@@ -2,6 +2,10 @@
 `Ijulia` is the package to install to use julia kernel inside `jupyter`. Indeed, don't forget that
 `jupyter` stands for `Julia Python R`.
 
+Upon running the method `notebook()` for the first time, users will be asked of installing Conda under the
+default path `$HOME/.julia/conda/3`, which is a different Conda if you have installed a Conda/miniconda
+somewhere else in your machine.
+
 
 ## Install a kernel in `IJulia / Jupyter Notebook`
 Open Julia's REPL and do as follows.
