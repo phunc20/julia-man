@@ -14,8 +14,22 @@ function sin_cos_plot()
 end
 ```
 
+## Dark Viewer
+Set in `plot()` the following:
+```julia
+background_color=:black,
+foreground_color=:white,
+```
+Cf. <https://docs.juliaplots.org/latest/colors/>
 
 
+## Useful Parameter Settings
+```julia
+aspect_ratio=:equal,
+legend=false,
+background_color=:black,
+foreground_color=:white,
+```
 
 
 I wanted to draw $B_p$ for $p$-norm.
