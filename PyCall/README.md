@@ -1,16 +1,82 @@
-## Specify A Python Virtual Environment
+## Specify A Python Virtual Environment for `PyCall`
 If you are a Python user, you probably have many virtual environment on your machine. But by default
-Julia won't know which one you want to use, and it will use its own reserved Python environment.
+Julia won't know which one you want to use, and it will use its a Python executable dependning on the
+OS one uses
 
-However, you are able to tell Julia which exact virtual environment you want to use. All you need is
+- Windows and MacOS: A separate Miniconda env exclusively for Julia
+- Linux: The system's Python (e.g. `/usr/bin/python3` for Debian)
+
+However, you are able to tell Julia which exact virtual environment you want to use. For example,
+if you are already a Conda user in Python, and that you have already a few env at hand, then
+
 ```julia
 using Pkg
-# Change the next line to suit your own virtual env path
+# Change the next line to suit your own virtual env path, here mine is named `oft`
 ENV["PYTHON"] = "/home/phunc20/.local/bin/miniconda3/envs/oft/bin/python"
 Pkg.build("PyCall")
 using PyCall
+# You are good to go!
 ```
 
+Caveats
+
+- It seems that every time you install a new package in your Conda virtual env, you have to repeat the above `Pkg.build("PyCall")` with that env again; otherwise, you won't be able to import the new package.
+- `virtualenvwrapper` seems to not cooperate with Julia as well as Conda. (Note that one can use `Sys.which("python")` or `Sys.which("python")` to check the Python
+executable's path from inside Julia.)
+  ```bash
+  ~$ workon py3.7
+  (py3.7) ~$ julia
+                 _
+     _       _ _(_)_     |  Documentation: https://docs.julialang.org
+    (_)     | (_) (_)    |
+     _ _   _| |_  __ _   |  Type "?" for help, "]?" for Pkg help.
+    | | | | | | |/ _` |  |
+    | | |_| | | | (_| |  |  Version 1.5.3 (2020-11-09)
+   _/ |\__'_|_|_|\__'_|  |  Official https://julialang.org/ release
+  |__/                   |
+  
+  julia> Sys.which("python3")
+  "/usr/bin/python3.7"
+  
+  julia> exit()
+  (py3.7) ~$ deactivate
+  ~$ source ~/.virtualenvs/py3.7/bin/activate  # this won't help, either
+  (py3.7) ~$ julia
+                 _
+     _       _ _(_)_     |  Documentation: https://docs.julialang.org
+    (_)     | (_) (_)    |
+     _ _   _| |_  __ _   |  Type "?" for help, "]?" for Pkg help.
+    | | | | | | |/ _` |  |
+    | | |_| | | | (_| |  |  Version 1.5.3 (2020-11-09)
+   _/ |\__'_|_|_|\__'_|  |  Official https://julialang.org/ release
+  |__/                   |
+  
+  julia> Sys.which("python3")
+  "/usr/bin/python3.7"
+  
+  julia> Sys.which("python")
+  "/usr/bin/python3.7"
+  
+  julia> exit()
+  (py3.7) ~$ deactivate
+  ~$ condact py3.10
+  (py3.10) ~$ julia
+                 _
+     _       _ _(_)_     |  Documentation: https://docs.julialang.org
+    (_)     | (_) (_)    |
+     _ _   _| |_  __ _   |  Type "?" for help, "]?" for Pkg help.
+    | | | | | | |/ _` |  |
+    | | |_| | | | (_| |  |  Version 1.5.3 (2020-11-09)
+   _/ |\__'_|_|_|\__'_|  |  Official https://julialang.org/ release
+  |__/                   |
+  
+  julia> Sys.which("python3")
+  "/home/phunc20/.local/bin/miniconda3/envs/py3.10/bin/python3.10"
+  
+  julia> exit()
+  (py3.10) ~$
+  ```
+- Even though you successfully built with `Pkg.build("PyCall")` with your favorite Conda env, the next time you use Julia REPL, `Sys.which("python3")` will still show system's Python, unless you activate your env before entering Julia REPL. Nevertheless, the Python with which you `using PyCall` will still remain your built Conda env's Python.
 
 ## Troubleshoot
 ### Failures
