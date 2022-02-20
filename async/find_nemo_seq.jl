@@ -39,10 +39,10 @@ if abspath(PROGRAM_FILE) == @__FILE__
 
   parsed_args = parse_args(ARGS, s)
   json_paths = expand(parsed_args["jsons"])
+  #println("json_paths = ", json_paths)
 
-
-  println("json_paths = ", json_paths)
   #@benchmark for path in json_paths
+  #@elapsed for path in json_paths
   @time for path in json_paths
     json = read_json(path)
     if json["name"] == "Nemo"
