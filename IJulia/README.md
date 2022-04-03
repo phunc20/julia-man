@@ -7,6 +7,15 @@ default path `$HOME/.julia/conda/3`, which is a different Conda if you have inst
 somewhere else in your machine.
 
 
+## Python Virtualenv
+```
+set ENV["PYTHON"]="", run Pkg.build("PyCall"), and re-launch Julia. Then,
+To install the numpy module, you can use `pyimport_conda("numpy", PKG)`,
+where PKG is the Anaconda package that contains the module numpy,
+or alternatively you can use the Conda package directly (via
+`using Conda` followed by `Conda.add` etcetera).
+```
+
 ## Install a kernel in `IJulia / Jupyter Notebook`
 Open Julia's REPL and do as follows.
 ```julia
