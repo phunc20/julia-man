@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.0
+# v0.18.4
 
 using Markdown
 using InteractiveUtils
@@ -18,7 +18,7 @@ Chúng ta nhắc lại rằng gradient và jacobien của một hàm $f$ có li�
 
 Đầu tiên chúng ta sẽ xem cách sử dụng `gradient` trong Flux.
 
-**Ví dụ 01.**
+**Ví dụ 1.**
 ```math
 \begin{align}
   f_{1}: \mathbb{R} &\to \mathbb{R} \\
@@ -57,7 +57,7 @@ f₁′(3)
 md"""
 Để chúng ta quan sát thêm một vài ví dụ.
 
-**Ví dụ 02.**
+**Ví dụ 2.**
 ```math
 \begin{align}
   f_{2}: \mathbb{R}^3 &\to \mathbb{R} \\
@@ -78,8 +78,69 @@ gradient(f₂,1,2,3)
 
 # ╔═╡ 5cfcd089-6dc3-4b7c-8e37-5abacd5a9f16
 md"""
-### Input arg không hạn chế ở dạng `Real`/`Float`
+### Input arg không hạn chế ở dạng 1-dimensional
+
 """
+
+# ╔═╡ 6ab0aac8-8297-44dd-a081-5b245fc52a24
+methods(gradient)
+
+# ╔═╡ 246b7dc5-b1e5-4ce6-bdbd-889496f03970
+md"""
+### Hai cái `gradient` methods
+Nếu ta tra cứu doc, thì ta sẽ nhìn thấy `gradient` có hai cái methods
+```julia
+gradient(f, args...) -> Tuple
+
+gradient(() -> loss(), ps::Params) -> Grads
+```
+Ngoài ra, các ví dụ trong documentation cũng khá thú vị:
+"""
+
+# ╔═╡ bab5dfc3-4f0e-4023-b840-5b7277745194
+gradient(*, 2.0, 3.0, 5.0)
+
+# ╔═╡ 8356c3f8-f815-4d14-9d53-dbe24eafb6e2
+md"""
+Có nghĩa là
+```math
+\nabla f(x, y, z) = (yz, xz, xy)
+```
+"""
+
+# ╔═╡ 7fe7b41c-2c9f-449f-af6b-eafccbbf29e2
+gradient([7, 11], 0, 1) do x, y, d
+  p = size(x, d)
+  sum(x.^p .+ y)
+end
+
+# ╔═╡ cd08c698-9749-42ce-b7f4-c4d67dab3b39
+md"""
+> Takes a zero-argument function, and returns a dictionary-like container, whose keys are arrays x in ps.
+
+
+"""
+
+# ╔═╡ f872747e-6ded-46f7-9e86-eb73d8888fad
+let
+  x = [1 2 3; 4 5 6]; y = [7, 8]; z = [1, 10, 100];
+  g = gradient(Flux.params([x, y])) do
+    sum(x .* y .* z')
+  end
+  println(g)
+  println(g[x])
+  println(haskey(g, z))
+end
+
+# ╔═╡ db6f519b-eca1-4535-8dd5-45a8b24a278d
+let
+  x = [2, 1]
+  y = [2, 0]
+  gs = gradient(Flux.params(x, y)) do
+    sum((x-y).^2)
+  end
+  keys(gs)
+end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -742,9 +803,17 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─f57140e9-f128-4a36-b12a-6269f8408097
 # ╠═1ecbe233-bf8d-479a-bf7b-3b3e79e75b03
 # ╠═23b2d3ba-7e78-482d-a3cc-b1f896f01fff
-# ╟─4932eef0-7dd8-4e53-8d05-2b6b82d69fc7
+# ╠═4932eef0-7dd8-4e53-8d05-2b6b82d69fc7
 # ╠═44e7067c-78b3-4785-b399-9ac1a094feaa
 # ╠═efd3f432-9f2e-4c9e-9780-4e3e42f73242
 # ╠═5cfcd089-6dc3-4b7c-8e37-5abacd5a9f16
+# ╠═6ab0aac8-8297-44dd-a081-5b245fc52a24
+# ╠═246b7dc5-b1e5-4ce6-bdbd-889496f03970
+# ╠═bab5dfc3-4f0e-4023-b840-5b7277745194
+# ╟─8356c3f8-f815-4d14-9d53-dbe24eafb6e2
+# ╠═7fe7b41c-2c9f-449f-af6b-eafccbbf29e2
+# ╠═cd08c698-9749-42ce-b7f4-c4d67dab3b39
+# ╠═f872747e-6ded-46f7-9e86-eb73d8888fad
+# ╠═db6f519b-eca1-4535-8dd5-45a8b24a278d
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
