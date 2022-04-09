@@ -1,13 +1,14 @@
 ### A Pluto.jl notebook ###
-# v0.18.4
+# v0.19.0
 
 using Markdown
 using InteractiveUtils
 
 # ╔═╡ 2c9236bc-6d81-4d07-80a7-e0c1d61e02bd
-begin
-  using Flux
-end
+using Flux
+
+# ╔═╡ 11d18cf3-c6ca-4e6a-aed3-557904511a50
+using LinearAlgebra
 
 # ╔═╡ 830bdff4-b742-11ec-0794-39699219159c
 md"""
@@ -144,18 +145,81 @@ Với ví dụ này, ta dần dần có thể rút ra quy tắc:
 # ╔═╡ e9807705-e21d-46d3-b3f7-7e9a5ff92161
 md"""
 **Ví dụ 4.**
+Give an $n$ by $n$ matrix $A$, define
 ```math
 \begin{align}
-  f_{4}: \mathbb{R}^n \times M_{n,n}(\mathbb{R})
-         \times \mathbb{R}^n &\to \mathbb{R} \\
-         (x, A, y)      &\mapsto x^{T}Ay \\
-  \\
-  \nabla f_{2}(x,y,z) &= (y, x, 2z) \\
-  \nabla f_{2}(1,2,3) &= (2, 1, 6)
+  %f_{4}: \mathbb{R}^n \times M_{n,n}(\mathbb{R})
+  f_{4}: \mathbb{R}^n \times \mathbb{R}^n &\to \mathbb{R} \\
+         %(x, A, y)      &\mapsto x^{T}Ay \\
+          (x, y)      &\mapsto x^{T}Ay\,. \\
 \end{align}
 ```
 
+That is, $f_4$ is a bilinear form. Then
+```math
+\nabla f_{4}(x,y) = \begin{bmatrix}
+  y^{T}A^{T} & x^{T}A
+\end{bmatrix}.
+```
+
+In particular,
+```math
+A = \begin{bmatrix}
+  1 & 0 & 1 \\
+  0 & 1 & 0 \\
+  0 & 0 & 1 \\
+\end{bmatrix} \implies
+\nabla f_{4}((1,2,3), (4,5,6)) = \begin{bmatrix}
+  10 & 5 & 6 & 1 & 2 & 4
+\end{bmatrix}.
+```
 """
+
+# ╔═╡ 81b0213d-34cc-49fe-93fe-2683b3ef7a3c
+begin
+  A = [1 0 1
+	   0 1 0
+	   0 0 1]
+  f₄(x, y) = x' * A * y
+end
+
+# ╔═╡ 69d61351-b987-4845-86ee-44395c825391
+gradient(f₄, [1,2,3], [4,5,6])
+
+# ╔═╡ fc9a3be1-f5ae-465d-9b87-342e4ce7e0f7
+
+
+# ╔═╡ 66619271-7c3b-4fb3-9c81-b52710dcd1bf
+
+
+# ╔═╡ e2589e2e-7058-405f-8f50-fab9b9585322
+
+
+# ╔═╡ a06a241a-7a59-4082-8bec-a9503f3f4157
+Flux.jacobian(inv, Diagonal(ones(3)))
+
+# ╔═╡ f489c312-58e1-4008-b1b0-b8888bd28c37
+
+
+# ╔═╡ ab8f42cf-ab27-4cb6-9721-fb222ab2df35
+md"""
+**Ví dụ 5.**
+```math
+\begin{align}
+  f_{5}: M_{n,n}(\mathbb{R}) &\to \mathbb{R} \\
+             A               &\mapsto \det(A) \\
+\end{align}
+```
+"""
+
+# ╔═╡ 100f5c58-d2a4-4ae8-8e68-4e73ae92c0d0
+gradient(det, Diagonal(ones(3)))
+
+# ╔═╡ 22ca5c4b-5bea-4b68-b86e-98f299f0aa15
+gradient(det, I)
+
+# ╔═╡ 58af6f06-fc52-43b3-ac1f-11d12488be5b
+
 
 # ╔═╡ 6ab0aac8-8297-44dd-a081-5b245fc52a24
 methods(gradient)
@@ -221,6 +285,7 @@ end
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
 Flux = "587475ba-b771-5e3f-ad9e-33799f191a9c"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 
 [compat]
 Flux = "~0.13.0"
@@ -885,7 +950,19 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╠═0e5d7054-0a61-4afc-b12e-9e93310fa312
 # ╠═a80abba4-2471-4901-bb28-77ca1e367a17
 # ╟─4f57bb29-2669-4a56-ad7e-bd275885a229
-# ╠═e9807705-e21d-46d3-b3f7-7e9a5ff92161
+# ╟─e9807705-e21d-46d3-b3f7-7e9a5ff92161
+# ╠═81b0213d-34cc-49fe-93fe-2683b3ef7a3c
+# ╠═69d61351-b987-4845-86ee-44395c825391
+# ╠═fc9a3be1-f5ae-465d-9b87-342e4ce7e0f7
+# ╠═66619271-7c3b-4fb3-9c81-b52710dcd1bf
+# ╠═e2589e2e-7058-405f-8f50-fab9b9585322
+# ╠═11d18cf3-c6ca-4e6a-aed3-557904511a50
+# ╠═a06a241a-7a59-4082-8bec-a9503f3f4157
+# ╠═f489c312-58e1-4008-b1b0-b8888bd28c37
+# ╟─ab8f42cf-ab27-4cb6-9721-fb222ab2df35
+# ╠═100f5c58-d2a4-4ae8-8e68-4e73ae92c0d0
+# ╠═22ca5c4b-5bea-4b68-b86e-98f299f0aa15
+# ╠═58af6f06-fc52-43b3-ac1f-11d12488be5b
 # ╠═6ab0aac8-8297-44dd-a081-5b245fc52a24
 # ╠═246b7dc5-b1e5-4ce6-bdbd-889496f03970
 # ╠═bab5dfc3-4f0e-4023-b840-5b7277745194
