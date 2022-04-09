@@ -63,8 +63,8 @@ md"""
   f_{2}: \mathbb{R}^3 &\to \mathbb{R} \\
          (x,y,z)      &\mapsto xy + z^2 \\
   \\
-  \nabla f_{2}'(x,y,z) &= (y, x, 2z) \\
-  \nabla f_{2}'(1,2,3) &= (2, 1, 6)
+  \nabla f_{2}(x,y,z) &= (y, x, 2z) \\
+  \nabla f_{2}(1,2,3) &= (2, 1, 6)
 \end{align}
 ```
 
@@ -78,7 +78,82 @@ gradient(f₂,1,2,3)
 
 # ╔═╡ 5cfcd089-6dc3-4b7c-8e37-5abacd5a9f16
 md"""
-### Input arg không hạn chế ở dạng 1-dimensional
+### Input arg không giới hạn ở dạng 1-dimensional
+Input args của hàm `f₁, f₂` ở trên đều ở dạng 1-dimensional, i.e.
+
+- trong `f₁(x)`, `x` được mặt định là một `Real`
+- trong `f₂(x,y,z)`, `x`, `y` và `z` đều được mặt định là `Real`
+
+Sau đây, chúng ta sẽ xem xét những hàm có input args là `Array` và xem thử `gradient`
+được trả về sẽ như thế nào.
+
+**Ví dụ 3.**
+```math
+\newcommand{\norm}[1]{\lVert{#1}\rVert}
+
+\begin{align}
+  f_{3}: \mathbb{R}^n \times \mathbb{R}^n &\to \mathbb{R} \\
+         (x,y)      &\mapsto {\norm{x-y}_{\ell_2}}^2 \\
+         \text{i.e.}\;(x_1, \ldots, x_n, y_1, \ldots, y_n)
+                    &\mapsto \sum_{k=1}^n (x_k - y_k)^2 \\
+  \\
+  \nabla f_{3}(x,y) &= \begin{bmatrix}
+    2(x_1 - y_1) \\
+    \vdots \\
+    2(x_n - y_n) \\
+    2(y_1 - x_1) \\
+    \vdots \\
+    2(y_n - x_n) \\
+  \end{bmatrix}^T \\
+  \nabla f_{3}(\begin{bmatrix}2\\1\end{bmatrix}, \begin{bmatrix}2\\0\end{bmatrix})
+  &= \begin{bmatrix}
+    2(2 - 2) \\
+    2(1 - 0) \\
+    2(2 - 2) \\
+    2(0 - 1) \\
+  \end{bmatrix}^T =
+  \begin{bmatrix}
+     0  &
+     2 &
+     0  &
+    -2
+  \end{bmatrix}
+\end{align}
+```
+"""
+
+# ╔═╡ 0e5d7054-0a61-4afc-b12e-9e93310fa312
+f₃(x, y) = sum((x - y).^2)
+
+# ╔═╡ a80abba4-2471-4901-bb28-77ca1e367a17
+gradient(f₃, [2., 1.], [2., 0.])
+
+# ╔═╡ 4f57bb29-2669-4a56-ad7e-bd275885a229
+md"""
+Với ví dụ này, ta dần dần có thể rút ra quy tắc:
+> Return value của hàm `gradient` là một `Tuple` có độ dài bằng số lượng input args
+> của hàm được vi phân, i.e.
+>
+> `length(gradient(f, args...))` bằng `length(args)`
+>
+> Hơn nữa, ta có (nếu ghi `ret = gradient(f, args...)`)
+>
+> `size(ret[i])` bằng `size(args[i])` với `i = 1, ..., length(args)`
+"""
+
+# ╔═╡ e9807705-e21d-46d3-b3f7-7e9a5ff92161
+md"""
+**Ví dụ 4.**
+```math
+\begin{align}
+  f_{4}: \mathbb{R}^n \times M_{n,n}(\mathbb{R})
+         \times \mathbb{R}^n &\to \mathbb{R} \\
+         (x, A, y)      &\mapsto x^{T}Ay \\
+  \\
+  \nabla f_{2}(x,y,z) &= (y, x, 2z) \\
+  \nabla f_{2}(1,2,3) &= (2, 1, 6)
+\end{align}
+```
 
 """
 
@@ -806,7 +881,11 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╠═4932eef0-7dd8-4e53-8d05-2b6b82d69fc7
 # ╠═44e7067c-78b3-4785-b399-9ac1a094feaa
 # ╠═efd3f432-9f2e-4c9e-9780-4e3e42f73242
-# ╠═5cfcd089-6dc3-4b7c-8e37-5abacd5a9f16
+# ╟─5cfcd089-6dc3-4b7c-8e37-5abacd5a9f16
+# ╠═0e5d7054-0a61-4afc-b12e-9e93310fa312
+# ╠═a80abba4-2471-4901-bb28-77ca1e367a17
+# ╟─4f57bb29-2669-4a56-ad7e-bd275885a229
+# ╠═e9807705-e21d-46d3-b3f7-7e9a5ff92161
 # ╠═6ab0aac8-8297-44dd-a081-5b245fc52a24
 # ╠═246b7dc5-b1e5-4ce6-bdbd-889496f03970
 # ╠═bab5dfc3-4f0e-4023-b840-5b7277745194
