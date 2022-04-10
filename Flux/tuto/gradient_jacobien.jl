@@ -203,22 +203,86 @@ Flux.jacobian(inv, Diagonal(ones(3)))
 
 # ╔═╡ ab8f42cf-ab27-4cb6-9721-fb222ab2df35
 md"""
-**Ví dụ 5.**
+**Ví dụ 5.** Định nghĩa ký hiệu $\text{E} := M_{n,n}(\mathbb{R})$.
 ```math
 \begin{align}
-  f_{5}: M_{n,n}(\mathbb{R}) &\to \mathbb{R} \\
-             A               &\mapsto \det(A) \\
+  f_{5} = \det: E &\to \mathbb{R} \\
+             \text{A}               &\mapsto \det(\text{A}) \\
 \end{align}
+```
+
+Ta biết rằng
+```math
+\text{D\,det(I)} = \text{tr} \in
+\mathcal{L}(\text{E}, \mathbb{R})
+```
+và
+```math
+\text{D\,det(X)(H)} = \text{tr}(\widetilde{X}^{T}H) \quad\forall\; \text{X, H} \in \text{E}
 ```
 """
 
 # ╔═╡ 100f5c58-d2a4-4ae8-8e68-4e73ae92c0d0
 gradient(det, Diagonal(ones(3)))
 
+# ╔═╡ a915729f-eebc-485f-9843-b5d85f5f5f15
+md"""
+**Note.** Cho dù trong `LinearAlgebra` có identity matrix $\text{I}$, ở đây mình không thể gọi `gradient(det, I)`.
+"""
+
 # ╔═╡ 22ca5c4b-5bea-4b68-b86e-98f299f0aa15
 gradient(det, I)
 
+# ╔═╡ 47b2b248-9e5e-4034-b45e-4ddec1019833
+md"""
+If
+```math
+\text{X} = \begin{bmatrix}
+  1 & 1 & 1 \\
+  0 & 1 & 1 \\
+  0 & 0 & 1
+\end{bmatrix}
+```
+
+then the comatrix of $\text{X}$ is
+
+```math
+\widetilde{\text{X}} = \begin{bmatrix}
+   1 &  0 &  0 \\
+  -1 &  1 &  0 \\
+   0 & -1 &  1
+\end{bmatrix}.
+```
+"""
+
 # ╔═╡ 58af6f06-fc52-43b3-ac1f-11d12488be5b
+gradient(det, [
+	1 1 1
+	0 1 1
+	0 0 1
+])
+
+# ╔═╡ 57a944e5-b48f-44f3-9f04-fa76f28b5d3d
+let
+  H = rand(1:10, (3,3))
+  X = [
+	1 1 1
+	0 1 1
+	0 0 1
+  ]
+  X̃ = [
+     1  0  0
+    -1  1  0
+     0 -1  1
+  ]
+  println("H = $H")
+  println("tr(X̃' * H) = $(tr(X̃' * H))")
+  println("sum(gradient(det, X)[1] .* H) = $(sum(gradient(det, X)[1] .* H))")
+  println("float(tr(X̃' * H)) == sum(gradient(det, X)[1] .* H): ",
+  float(tr(X̃' * H)) == sum(gradient(det, X)[1] .* H))
+end
+
+# ╔═╡ bae4e538-8f50-4f6f-92b2-b9035957a1e9
 
 
 # ╔═╡ 6ab0aac8-8297-44dd-a081-5b245fc52a24
@@ -936,21 +1000,21 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 """
 
 # ╔═╡ Cell order:
-# ╠═830bdff4-b742-11ec-0794-39699219159c
+# ╟─830bdff4-b742-11ec-0794-39699219159c
 # ╠═2c9236bc-6d81-4d07-80a7-e0c1d61e02bd
 # ╠═9d422048-c180-4777-a6ab-1ad2c873b830
 # ╠═b67ef6fb-2128-4863-9abd-1c858e71632b
 # ╟─f57140e9-f128-4a36-b12a-6269f8408097
 # ╠═1ecbe233-bf8d-479a-bf7b-3b3e79e75b03
 # ╠═23b2d3ba-7e78-482d-a3cc-b1f896f01fff
-# ╠═4932eef0-7dd8-4e53-8d05-2b6b82d69fc7
+# ╟─4932eef0-7dd8-4e53-8d05-2b6b82d69fc7
 # ╠═44e7067c-78b3-4785-b399-9ac1a094feaa
 # ╠═efd3f432-9f2e-4c9e-9780-4e3e42f73242
 # ╟─5cfcd089-6dc3-4b7c-8e37-5abacd5a9f16
 # ╠═0e5d7054-0a61-4afc-b12e-9e93310fa312
 # ╠═a80abba4-2471-4901-bb28-77ca1e367a17
 # ╟─4f57bb29-2669-4a56-ad7e-bd275885a229
-# ╟─e9807705-e21d-46d3-b3f7-7e9a5ff92161
+# ╠═e9807705-e21d-46d3-b3f7-7e9a5ff92161
 # ╠═81b0213d-34cc-49fe-93fe-2683b3ef7a3c
 # ╠═69d61351-b987-4845-86ee-44395c825391
 # ╠═fc9a3be1-f5ae-465d-9b87-342e4ce7e0f7
@@ -961,8 +1025,12 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╠═f489c312-58e1-4008-b1b0-b8888bd28c37
 # ╟─ab8f42cf-ab27-4cb6-9721-fb222ab2df35
 # ╠═100f5c58-d2a4-4ae8-8e68-4e73ae92c0d0
+# ╟─a915729f-eebc-485f-9843-b5d85f5f5f15
 # ╠═22ca5c4b-5bea-4b68-b86e-98f299f0aa15
+# ╟─47b2b248-9e5e-4034-b45e-4ddec1019833
 # ╠═58af6f06-fc52-43b3-ac1f-11d12488be5b
+# ╠═57a944e5-b48f-44f3-9f04-fa76f28b5d3d
+# ╠═bae4e538-8f50-4f6f-92b2-b9035957a1e9
 # ╠═6ab0aac8-8297-44dd-a081-5b245fc52a24
 # ╠═246b7dc5-b1e5-4ce6-bdbd-889496f03970
 # ╠═bab5dfc3-4f0e-4023-b840-5b7277745194
