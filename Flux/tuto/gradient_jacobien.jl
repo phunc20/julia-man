@@ -227,7 +227,33 @@ gradient(det, Diagonal(ones(3)))
 
 # ╔═╡ a915729f-eebc-485f-9843-b5d85f5f5f15
 md"""
-**Note.** Cho dù trong `LinearAlgebra` có identity matrix $\text{I}$, ở đây mình không thể gọi `gradient(det, I)`.
+The return value of `gradient(det, Diagonal(ones(3)))` is as we expect (i.e. an array of the same size as `Diagonal(ones(3))`). However, how do we relate this to the trace function $\text{tr} \in \mathcal{L}(\text{E}, \mathbb{R})\,$?
+
+Intuitively, the answer should be: For every matrix $\text{H} \in E$, to obtain $\text{tr(H)}$, we take the "dot product" btw the `gradient(det, Diagonal(ones(3)))[1]` and `H`
+"""
+
+# ╔═╡ 6b9e62c5-75aa-4600-89d2-28ab67af43d0
+supertypes(gradient(det, Diagonal(ones(3))))
+
+# ╔═╡ 01436f0d-d33a-48f8-ab5f-1da427902401
+#⋅(A::AbstractArray, B::AbstractArray) = sum(A .* B)
+⋅(A, B) = sum(A .* B)
+
+# ╔═╡ 8685bc7f-743a-4821-9384-a2be57209c4c
+let
+  H = float(rand(1:10, (2,2)))
+  println("H = $H")
+  println("gradient(det, Diagonal(ones(2)))[1] ⋅ H = ",
+           gradient(det, Diagonal(ones(2)))[1] ⋅ H)
+  println("tr(H) = ", tr(H))
+end
+
+# ╔═╡ 4b7adb43-d364-482d-b1bf-315a0d7a1a0c
+
+
+# ╔═╡ b63f9e95-03ea-45d3-8193-dd347bc1c561
+md"""
+**Rmk.** Cho dù trong `LinearAlgebra` có identity matrix $\text{I}$, ở đây mình không thể gọi `gradient(det, I)`.
 """
 
 # ╔═╡ 22ca5c4b-5bea-4b68-b86e-98f299f0aa15
@@ -1014,7 +1040,7 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╠═0e5d7054-0a61-4afc-b12e-9e93310fa312
 # ╠═a80abba4-2471-4901-bb28-77ca1e367a17
 # ╟─4f57bb29-2669-4a56-ad7e-bd275885a229
-# ╠═e9807705-e21d-46d3-b3f7-7e9a5ff92161
+# ╟─e9807705-e21d-46d3-b3f7-7e9a5ff92161
 # ╠═81b0213d-34cc-49fe-93fe-2683b3ef7a3c
 # ╠═69d61351-b987-4845-86ee-44395c825391
 # ╠═fc9a3be1-f5ae-465d-9b87-342e4ce7e0f7
@@ -1023,9 +1049,14 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╠═11d18cf3-c6ca-4e6a-aed3-557904511a50
 # ╠═a06a241a-7a59-4082-8bec-a9503f3f4157
 # ╠═f489c312-58e1-4008-b1b0-b8888bd28c37
-# ╟─ab8f42cf-ab27-4cb6-9721-fb222ab2df35
+# ╠═ab8f42cf-ab27-4cb6-9721-fb222ab2df35
 # ╠═100f5c58-d2a4-4ae8-8e68-4e73ae92c0d0
-# ╟─a915729f-eebc-485f-9843-b5d85f5f5f15
+# ╠═a915729f-eebc-485f-9843-b5d85f5f5f15
+# ╠═6b9e62c5-75aa-4600-89d2-28ab67af43d0
+# ╠═01436f0d-d33a-48f8-ab5f-1da427902401
+# ╠═8685bc7f-743a-4821-9384-a2be57209c4c
+# ╠═4b7adb43-d364-482d-b1bf-315a0d7a1a0c
+# ╠═b63f9e95-03ea-45d3-8193-dd347bc1c561
 # ╠═22ca5c4b-5bea-4b68-b86e-98f299f0aa15
 # ╟─47b2b248-9e5e-4034-b45e-4ddec1019833
 # ╠═58af6f06-fc52-43b3-ac1f-11d12488be5b
