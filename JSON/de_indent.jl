@@ -33,7 +33,7 @@ if abspath(PROGRAM_FILE) == @__FILE__
       help = "path to json file(s)"
       required = true
     "--indent"
-      help = "indentation for saved JSON file(s)"
+      help = "(# of indented spaces) for saved JSON file(s). 0 means de-indent"
       arg_type = Int
       default = 0
   end
@@ -44,13 +44,16 @@ if abspath(PROGRAM_FILE) == @__FILE__
     json = read_json(path)
     stem = splitext(basename(path))[1]
     indentation = parsed_args["indent"]
-    data = if  indentation > 0
-      JSON.json(json, indentation)
+    if  indentation > 0
+      data = JSON.json(json, indentation)
+      open("$(stem)_indent$(indentation).json", "w") do f
+        write(f, data)
+      end
     else
-      JSON.json(json)
-    end
-    open("$(stem)_lisible.json", "w") do f
-      write(f, data)
+      data = JSON.json(json)
+      open("$(stem)_deindent.json", "w") do f
+        write(f, data)
+      end
     end
   end
 end
