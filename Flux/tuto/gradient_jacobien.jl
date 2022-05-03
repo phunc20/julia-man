@@ -1,14 +1,27 @@
 ### A Pluto.jl notebook ###
-# v0.19.0
+# v0.19.3
 
 using Markdown
 using InteractiveUtils
+
+# This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
+macro bind(def, element)
+    quote
+        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
+        local el = $(esc(element))
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
+        el
+    end
+end
 
 # ╔═╡ 2c9236bc-6d81-4d07-80a7-e0c1d61e02bd
 using Flux
 
 # ╔═╡ 11d18cf3-c6ca-4e6a-aed3-557904511a50
 using LinearAlgebra
+
+# ╔═╡ deaadfa0-4c98-412c-b630-fd1cdc51971f
+using PlutoUI
 
 # ╔═╡ 830bdff4-b742-11ec-0794-39699219159c
 md"""
@@ -371,14 +384,51 @@ let
   keys(gs)
 end
 
+# ╔═╡ 100fbc55-8d49-49a8-adfa-5478917e12ea
+md"""
+### Subgradient
+"""
+
+# ╔═╡ 915e9ad3-40fb-41b3-bdfc-b95f0727a4d7
+begin
+  left_slope_slider = @bind left_slope Slider(-100:100, show_value=true)
+  right_slope_slider = @bind right_slope Slider(-100:100, show_value=true)
+  md"""
+  left slope: $(left_slope_slider)
+  
+  right slope: $(right_slope_slider)
+
+  ```math
+  f(x) :=
+  ```
+  """
+end
+
+# ╔═╡ abb2e65f-571d-4513-b214-6634655b1ff7
+function fold(x)
+  if x <= 0
+    left_slope * x
+  else
+    right_slope * x
+  end
+end
+
+# ╔═╡ 3e920e58-7ced-416c-9055-8e23c15c381a
+gradient(fold, 0)
+
+# ╔═╡ 98e22e76-7972-46de-8253-1b7708db2822
+gradient(abs, 0)
+
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
 Flux = "587475ba-b771-5e3f-ad9e-33799f191a9c"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 
 [compat]
 Flux = "~0.13.0"
+PlutoUI = "~0.7.38"
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000002
@@ -393,6 +443,12 @@ deps = ["ChainRulesCore", "LinearAlgebra"]
 git-tree-sha1 = "6f1d9bc1c08f9f4a8fa92e3ea3cb50153a1b40d4"
 uuid = "621f4979-c628-5d54-868e-fcf4e3e8185c"
 version = "1.1.0"
+
+[[deps.AbstractPlutoDingetjes]]
+deps = ["Pkg"]
+git-tree-sha1 = "8eaf9f1b4921132a4cff3f36a1d9ba923b14a481"
+uuid = "6e696c72-6542-2067-7265-42206c756150"
+version = "1.1.4"
 
 [[deps.Accessors]]
 deps = ["Compat", "CompositionsBase", "ConstructionBase", "Future", "LinearAlgebra", "MacroTools", "Requires", "Test"]
@@ -471,6 +527,12 @@ deps = ["ChainRulesCore", "LinearAlgebra", "Test"]
 git-tree-sha1 = "bf98fa45a0a4cee295de98d4c1462be26345b9a1"
 uuid = "9e997f8a-9a97-42d5-a9f1-ce6bfc15e2c0"
 version = "0.1.2"
+
+[[deps.ColorTypes]]
+deps = ["FixedPointNumbers", "Random"]
+git-tree-sha1 = "024fe24d83e4a5bf5fc80501a314ce0d1aa35597"
+uuid = "3da002f7-5984-5a60-b8a6-cbb66c0b333f"
+version = "0.11.0"
 
 [[deps.CommonSubexpressions]]
 deps = ["MacroTools", "Test"]
@@ -583,6 +645,12 @@ git-tree-sha1 = "246621d23d1f43e3b9c368bf3b72b2331a27c286"
 uuid = "1a297f60-69ca-5386-bcde-b61e274b549b"
 version = "0.13.2"
 
+[[deps.FixedPointNumbers]]
+deps = ["Statistics"]
+git-tree-sha1 = "335bfdceacc84c5cdf16aadc768aa5ddfc5383cc"
+uuid = "53c48c17-4a7d-5ca2-90c5-79b7896eea93"
+version = "0.8.4"
+
 [[deps.Flux]]
 deps = ["Adapt", "ArrayInterface", "CUDA", "ChainRulesCore", "Functors", "LinearAlgebra", "MLUtils", "MacroTools", "NNlib", "NNlibCUDA", "Optimisers", "ProgressLogging", "Random", "Reexport", "SparseArrays", "SpecialFunctions", "Statistics", "StatsBase", "Test", "Zygote"]
 git-tree-sha1 = "e932b26ac243f312af2d9009de08b89be0e01a84"
@@ -627,6 +695,23 @@ git-tree-sha1 = "647a54f196b5ffb7c3bc2fec5c9a57fa273354cc"
 uuid = "61eb1bfa-7361-4325-ad38-22787b887f55"
 version = "0.13.14"
 
+[[deps.Hyperscript]]
+deps = ["Test"]
+git-tree-sha1 = "8d511d5b81240fc8e6802386302675bdf47737b9"
+uuid = "47d2ed2b-36de-50cf-bf87-49c2cf4b8b91"
+version = "0.0.4"
+
+[[deps.HypertextLiteral]]
+git-tree-sha1 = "2b078b5a615c6c0396c77810d92ee8c6f470d238"
+uuid = "ac1192a8-f4b3-4bfe-ba22-af5b92cd3ab2"
+version = "0.9.3"
+
+[[deps.IOCapture]]
+deps = ["Logging", "Random"]
+git-tree-sha1 = "f7be53659ab06ddc986428d3a9dcc95f6fa6705a"
+uuid = "b5f81e59-6552-4d32-b1f0-c071b021bf89"
+version = "0.2.2"
+
 [[deps.IRTools]]
 deps = ["InteractiveUtils", "MacroTools", "Test"]
 git-tree-sha1 = "7f43342f8d5fd30ead0ba1b49ab1a3af3b787d24"
@@ -668,6 +753,12 @@ deps = ["Preferences"]
 git-tree-sha1 = "abc9885a7ca2052a736a600f7fa66209f96506e1"
 uuid = "692b3bcd-3c85-4b1f-b108-f13ce0eb3210"
 version = "1.4.1"
+
+[[deps.JSON]]
+deps = ["Dates", "Mmap", "Parsers", "Unicode"]
+git-tree-sha1 = "3c837543ddb02250ef42f4738347454f95079d4e"
+uuid = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
+version = "0.21.3"
 
 [[deps.JuliaVariables]]
 deps = ["MLStyle", "NameResolution"]
@@ -817,9 +908,21 @@ git-tree-sha1 = "85f8e6578bf1f9ee0d11e7bb1b1456435479d47c"
 uuid = "bac558e1-5e72-5ebc-8fee-abe8a469f55d"
 version = "1.4.1"
 
+[[deps.Parsers]]
+deps = ["Dates"]
+git-tree-sha1 = "1285416549ccfcdf0c50d4997a94331e88d68413"
+uuid = "69de0a69-1ddd-5017-9359-2bf0b02dc9f0"
+version = "2.3.1"
+
 [[deps.Pkg]]
 deps = ["Artifacts", "Dates", "Downloads", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "REPL", "Random", "SHA", "Serialization", "TOML", "Tar", "UUIDs", "p7zip_jll"]
 uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
+
+[[deps.PlutoUI]]
+deps = ["AbstractPlutoDingetjes", "Base64", "ColorTypes", "Dates", "Hyperscript", "HypertextLiteral", "IOCapture", "InteractiveUtils", "JSON", "Logging", "Markdown", "Random", "Reexport", "UUIDs"]
+git-tree-sha1 = "670e559e5c8e191ded66fa9ea89c97f10376bb4c"
+uuid = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
+version = "0.7.38"
 
 [[deps.Preferences]]
 deps = ["TOML"]
@@ -1070,5 +1173,11 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╠═cd08c698-9749-42ce-b7f4-c4d67dab3b39
 # ╠═f872747e-6ded-46f7-9e86-eb73d8888fad
 # ╠═db6f519b-eca1-4535-8dd5-45a8b24a278d
+# ╠═100fbc55-8d49-49a8-adfa-5478917e12ea
+# ╠═deaadfa0-4c98-412c-b630-fd1cdc51971f
+# ╠═915e9ad3-40fb-41b3-bdfc-b95f0727a4d7
+# ╠═abb2e65f-571d-4513-b214-6634655b1ff7
+# ╠═3e920e58-7ced-416c-9055-8e23c15c381a
+# ╠═98e22e76-7972-46de-8253-1b7708db2822
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
