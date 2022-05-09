@@ -11,7 +11,7 @@ function write_simple_json(path::String, c::Char)
 end
 
 function bad_async_gen_data()
-  folder = mkdir("data")
+  folder = mktempdir()
   function producer(channel::Channel)
     for c in 'a':'z'
       put!(channel, c)
@@ -23,7 +23,7 @@ function bad_async_gen_data()
 end
 
 function wrong_async_gen_data()
-  folder = mkdir("data")
+  folder = mktempdir()
   for c in 'a':'z'
     path = "$folder/$c.json"
     @async write_simple_json(path, c)
@@ -31,7 +31,7 @@ function wrong_async_gen_data()
 end
 
 function seq_gen_data()
-  folder = mkdir("data")
+  folder = mktempdir()
   for c in 'a':'z'
     path = "$folder/$c.json"
     if !isfile(path)
@@ -58,15 +58,3 @@ end
 function async_merge(json_paths)
 end
 
-
-#seq_gen_data()
-#wrong_async_gen_data()
-#bad_async_gen_data()
-
-#rm("data"; force=true, recursive=true)
-#@benchmark rm("data"; force=true, recursive=true); seq_gen_data()
-#@btime rm("data"; force=true, recursive=true); seq_gen_data()
-#@btime rm("data"; force=true, recursive=true); wrong_async_gen_data()
-@btime rm("data"; force=true, recursive=true); bad_async_gen_data()
-#@btime wrong_async_gen_data()
-#@btime bad_async_gen_data()
