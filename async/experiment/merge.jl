@@ -1,5 +1,6 @@
 using JSON
 using ProgressBars
+using BenchmarkTools
 
 function write_simple_json(c::Char, path::String)
   dict = Dict(c => Int(c) - Int('a') + 1)
@@ -9,24 +10,30 @@ function write_simple_json(c::Char, path::String)
   end
 end
 
-function async_gen_data()
-  if !isdir("data")
-    folder = mkdir("data")
-  else
-    folder = "data"
+function bad_async_gen_data()
+  folder = mkdir("data")
+  function producer(channel::Channel)
+    for c in 'a':'z'
+      put!(channel, c)
+    end
   end
+  channel = Channel(producer)
+  for c in channel
+    path = "$folder/$c.json"
+    @async write_simple_json(c, path)
+  end
+end
+
+function wrong_async_gen_data()
+  folder = mkdir("data")
   for c in 'a':'z'
     path = "$folder/$c.json"
-    if !isfile(path)
-      @async write_simple_json(c, path)
-    end
+    @async write_simple_json(c, path)
   end
 end
 
 function seq_gen_data()
-  if !isdir("data")
-    folder = mkdir("data")
-  end
+  folder = mkdir("data")
   for c in 'a':'z'
     path = "$folder/$c.json"
     if !isfile(path)
@@ -53,5 +60,7 @@ end
 function async_merge(json_paths)
 end
 
-#seq_gen_data()
-async_gen_data()
+rm("data"; force=true, recursive=true)
+#@btime seq_gen_data()
+#@btime wrong_async_gen_data()
+@btime bad_async_gen_data()
