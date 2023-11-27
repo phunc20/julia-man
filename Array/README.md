@@ -1,8 +1,31 @@
-## Ecritures
-`[1 2 3 4], [1,2,3,4], [1;2;3;4], 1:4, Array(1:4)` are similar ways to write a literal array
-in Julia. Here is their differences (and similarities):
+## Literals
+`[1 2 3 4], [1,2,3,4], [1;2;3;4], 1:4, Array(1:4)` are similar ways
+to write a literal array in Julia. The following are
+their differences (and similarities):
 - `[1 2 3 4]` is an `Array{Int64,2}` of size `(1, 4)`
 - both `[1,2,3,4]` and `[1;2;3;4]` are `Array{Int64,1}` of size `(4,)`
+- To obtain the same array but with size `(4, 1)`, do
+    - `[1;2;3;4;;]`
+    - A few more examples:
+      ```julia
+      julia> [1;2;3;;4;5;6;;7;8;9]
+      3×3 Matrix{Int64}:
+       1  4  7
+       2  5  8
+       3  6  9
+      
+      julia> [1;2;3;;4;5;6;;7;8;9;;]
+      3×3 Matrix{Int64}:
+       1  4  7
+       2  5  8
+       3  6  9
+      
+      julia> [1 4 7; 2 5 8; 3 6 9]
+      3×3 Matrix{Int64}:
+       1  4  7
+       2  5  8
+       3  6  9
+      ```
 - `1:4` is a `UnitRange{Int64}`
 - `Array(1:4)` is also `Array{Int64,1}`
 
